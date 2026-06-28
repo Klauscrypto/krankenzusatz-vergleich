@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Disallow: /blog/wp-admin/
+Disallow: /blog/wp-includes/
+Disallow: /blog/wp-login.php
+Disallow: /blog/?s=
+Disallow: /blog/xmlrpc.php
+Disallow: /blog/wp-cron.php
+Disallow: /blog/trackback/
+Disallow: /*?replytocom=
+Disallow: /*?p=
+Crawl-delay: 1
+
+# Sitemaps
+Sitemap: https://krankenzusatz-vergleich.de/blog/sitemap_index.xml
+Sitemap: https://krankenzusatz-vergleich.de/blog/post-sitemap.xml
+Sitemap: https://krankenzusatz-vergleich.de/blog/category-sitemap.xml
+Sitemap: https://krankenzusatz-vergleich.de/blog/page-sitemap.xml
