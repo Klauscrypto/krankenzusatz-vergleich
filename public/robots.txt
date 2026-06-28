@@ -12,6 +12,7 @@ Disallow: /*?p=
 Crawl-delay: 1
 
 # Sitemaps
+Sitemap: https://krankenzusatz-vergleich.de/sitemap.xml
 Sitemap: https://krankenzusatz-vergleich.de/blog/sitemap_index.xml
 Sitemap: https://krankenzusatz-vergleich.de/blog/post-sitemap.xml
 Sitemap: https://krankenzusatz-vergleich.de/blog/category-sitemap.xml
