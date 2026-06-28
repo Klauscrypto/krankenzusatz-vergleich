@@ -10,21 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: root
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            rsync -av --delete /tmp/deploy/ /var/www/krankenzusatz-vergleich/ || true
-
-      - name: Copy files to server
+      - name: Deploy to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: root
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "public/"
-          target: "/var/www/krankenzusatz-vergleich/"
+          target: "/var/www/krankenzusatz-vergleich"
           strip_components: 1
