@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Hauptseiten -->
   <url>
     <loc>https://krankenzusatz-vergleich.de/</loc>
     <xhtml:link rel="alternate" hreflang="de" href="https://krankenzusatz-vergleich.de/"/>
@@ -19,6 +21,36 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- Versicherungsarten -->
+  <url>
+    <loc>https://krankenzusatz-vergleich.de/zahnzusatz/</loc>
+    <lastmod>2026-06-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://krankenzusatz-vergleich.de/krankenhaus/</loc>
+    <lastmod>2026-06-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Anbieter-Seiten -->
+  <url>
+    <loc>https://krankenzusatz-vergleich.de/dkv/</loc>
+    <lastmod>2026-06-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Rechtliches -->
+  <url>
+    <loc>https://krankenzusatz-vergleich.de/erstinformation/</loc>
+    <lastmod>2026-06-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
   <url>
     <loc>https://krankenzusatz-vergleich.de/impressum/</loc>
     <lastmod>2026-06-28</lastmod>
@@ -31,4 +63,5 @@
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
+
 </urlset>
