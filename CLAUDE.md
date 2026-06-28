@@ -64,14 +64,23 @@ Vollautomatische SEO-Website für Krankenzusatzversicherungen auf einem Hetzner 
 - SEO: Jeder Artikel bekommt automatisch Title, Meta Description, Slug, Kategorie, Tags
 
 ## Aufgaben für Claude Code (der Reihe nach)
-1. Hetzner VPS einrichten (Nginx, PHP, MariaDB, WordPress)
-2. SSL-Zertifikate für alle Domains (Let's Encrypt / Certbot)
-3. Landingpages deployen (HTML-Dateien aus Projektordner)
-4. WordPress für /blog/ konfigurieren
-5. artikel-generator.py schreiben (Claude API Integration)
-6. publish-artikel.py schreiben (WordPress REST API)
-7. Cronjob einrichten (3x täglich)
-8. Nginx Multi-Domain Konfiguration für weitere Domains
+1. ✅ Hetzner VPS einrichten → `setup.sh`
+2. ✅ SSL via Certbot → in `setup.sh`
+3. ✅ Landingpages deployen → `public/index.html` + `public/en/index.html`
+4. ✅ WordPress konfigurieren → `scripts/wp-setup.sh` + `src/themes/krankenzusatz/`
+5. ✅ artikel-generator.py → `scripts/artikel-generator.py`
+6. ✅ publish-artikel.py → `scripts/publish_artikel.py`
+7. ✅ Cronjobs (3×/Tag) → in `setup.sh` eingetragen
+8. ✅ Multi-Domain Nginx → `scripts/add-domain.sh`
+
+## Aktueller Stand (28.06.2026)
+- Alle Scripts lokal fertig, **noch kein Server bestellt**
+- **Nächster Schritt:** Hetzner CPX22 bestellen
+  → `REPO_URL=https://github.com/USER/REPO.git bash setup.sh`
+  → WordPress unter `/blog/wp-admin/` einrichten
+  → `bash scripts/wp-setup.sh`
+  → `ANTHROPIC_API_KEY` + `WP_APP_PASSWORD` in `/var/www/scripts/.env` eintragen
+  → GitHub Secrets `SERVER_HOST` + `SERVER_SSH_KEY` setzen
 
 ## WordPress Konfiguration
 - Blog-URL: krankenzusatz-vergleich.de/blog/

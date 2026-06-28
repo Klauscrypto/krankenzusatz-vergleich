@@ -3,41 +3,881 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Krankenzusatzversicherung Vergleich</title>
-  <meta name="description" content="Vergleichen Sie Krankenzusatzversicherungen schnell und einfach." />
-  <link rel="stylesheet" href="/css/style.css" />
+
+  <!-- SEO Primary -->
+  <title>Krankenzusatzversicherung Vergleich 2026 – Bis zu 80% Mehrleistung, kein Stress</title>
+  <meta name="description" content="Krankenzusatzversicherung clever vergleichen: Zahnzusatz, Krankenhaus, Ausland & Heilpraktiker. Unabhängiger Vergleich, täglich aktuell. Jetzt kostenlosen Tarifcheck starten." />
+  <meta name="keywords" content="Krankenzusatzversicherung, Krankenzusatzversicherung Vergleich, Zahnzusatz Versicherung, Krankenhaustagegeld, Private Zusatzversicherung, GKV Zusatz, Heilpraktiker Versicherung" />
+  <link rel="canonical" href="https://krankenzusatz-vergleich.de/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Krankenzusatzversicherung Vergleich 2026 – Unabhängig & Aktuell" />
+  <meta property="og:description" content="Finde die beste Krankenzusatzversicherung: Zahn, Krankenhaus, Ausland, Heilpraktiker. Täglich aktualisiert. Kostenlos vergleichen." />
+  <meta property="og:url" content="https://krankenzusatz-vergleich.de/" />
+  <meta property="og:locale" content="de_DE" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Krankenzusatzversicherung Vergleich 2026" />
+  <meta name="twitter:description" content="Unabhängiger Vergleich – Zahn, Krankenhaus, Ausland, Heilpraktiker. Jetzt kostenlosen Tarifcheck starten." />
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "krankenzusatz-vergleich.de",
+    "url": "https://krankenzusatz-vergleich.de",
+    "description": "Unabhängiger Vergleich für Krankenzusatzversicherungen in Deutschland",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://krankenzusatz-vergleich.de/suche?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Was ist eine Krankenzusatzversicherung?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Eine Krankenzusatzversicherung ergänzt die gesetzliche Krankenversicherung (GKV) und übernimmt Leistungen, die die GKV nicht oder nur teilweise bezahlt – zum Beispiel Zahnersatz, Chefarztbehandlung, Auslandsreiseschutz oder Heilpraktikerkosten."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Lohnt sich eine Krankenzusatzversicherung?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja, in den meisten Fällen. Besonders bei Zahnersatz, Krankenhausaufenthalten und alternativmedizinischen Behandlungen können Zusatzversicherungen mehrere tausend Euro im Jahr sparen."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Wie viel kostet eine Krankenzusatzversicherung?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Je nach Leistungsumfang und Alter sind Beiträge ab ca. 8 € pro Monat möglich. Umfassende Tarife kosten zwischen 30 und 120 € monatlich."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --ink:      #0e1b2a;
+      --ink-soft: #3a4a5c;
+      --ink-mute: #6b7f94;
+      --bg:       #f7f9fc;
+      --surface:  #ffffff;
+      --accent:   #0057ff;
+      --accent-h: #003fc2;
+      --green:    #00b87a;
+      --red:      #e63650;
+      --gold:     #f5a623;
+      --border:   #dde4ed;
+      --radius:   12px;
+      --shadow:   0 2px 16px rgba(14,27,42,.07);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    .eyebrow {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    h1 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 800; line-height: 1.1; }
+    h2 { font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 700; line-height: 1.2; }
+    h3 { font-size: 1.15rem; font-weight: 700; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .section    { padding: 80px 0; }
+    .section--alt { background: var(--surface); }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+    }
+    .nav-logo {
+      font-size: 1.05rem; font-weight: 800; color: var(--ink);
+      text-decoration: none; letter-spacing: -.02em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: .9rem; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent); color: #fff; border: none; border-radius: 8px;
+      padding: 10px 20px; font-size: .9rem; font-weight: 700; cursor: pointer;
+      text-decoration: none; transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--accent-h); }
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0e1b2a 0%, #1a3a6b 60%, #0057ff22 100%);
+      color: #fff;
+      padding: 90px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 75% 50%, #0057ff18 0%, transparent 70%);
+    }
+    .hero-inner {
+      display: grid; grid-template-columns: 1fr 420px; gap: 60px; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+      border-radius: 20px; padding: 6px 14px; font-size: .8rem; font-weight: 600;
+      margin-bottom: 20px; color: #a8d4ff;
+    }
+    .hero-badge::before { content: '●'; color: var(--green); font-size: .6rem; }
+    .hero h1 { color: #fff; margin-bottom: 20px; }
+    .hero h1 em { color: #5da8ff; font-style: normal; }
+    .hero-sub { color: #c8d8ee; font-size: 1.1rem; max-width: 520px; margin-bottom: 32px; }
+    .hero-stats {
+      display: flex; gap: 32px; margin-bottom: 36px;
+    }
+    .hero-stat strong { display: block; font-size: 1.8rem; font-weight: 800; color: #fff; }
+    .hero-stat span { font-size: .8rem; color: #8aaecf; }
+
+    /* Vergleichsrechner Box */
+    .hero-widget {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.25);
+    }
+    .hero-widget h3 { color: var(--ink); margin-bottom: 6px; }
+    .widget-sub { color: var(--ink-mute); font-size: .85rem; margin-bottom: 20px; }
+    .form-row { display: flex; flex-direction: column; gap: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: .8rem; font-weight: 600; color: var(--ink-soft); }
+    .form-group select, .form-group input {
+      width: 100%; padding: 11px 14px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: .95rem; color: var(--ink);
+      background: var(--bg); outline: none; transition: border-color .2s;
+      appearance: none;
+    }
+    .form-group select:focus, .form-group input:focus { border-color: var(--accent); }
+    .checkbox-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0;
+    }
+    .check-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .82rem; color: var(--ink-soft); cursor: pointer;
+    }
+    .check-item input[type=checkbox] { accent-color: var(--accent); width: 15px; height: 15px; }
+    .btn-primary {
+      width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none;
+      border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: background .2s, transform .1s; margin-top: 6px;
+    }
+    .btn-primary:hover { background: var(--accent-h); transform: translateY(-1px); }
+    .widget-trust { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: .78rem; color: var(--ink-mute); }
+    .widget-trust::before { content: '🔒'; font-size: .9rem; }
+
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-widget { max-width: 480px; }
+    }
+
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+    }
+    .trust-items {
+      display: flex; flex-wrap: wrap; gap: 24px 40px;
+      align-items: center; justify-content: center;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .85rem; color: var(--ink-soft); font-weight: 500;
+    }
+    .trust-icon { font-size: 1.1rem; }
+
+    /* ── SCHRECK-ZAHL SECTION ── */
+    .fright-section { background: #fff8f0; border-top: 3px solid var(--gold); border-bottom: 3px solid var(--gold); padding: 60px 0; }
+    .fright-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; text-align: center; }
+    .fright-number { font-size: 2.8rem; font-weight: 800; color: var(--red); display: block; }
+    .fright-label { font-size: .9rem; color: var(--ink-soft); margin-top: 6px; }
+
+    /* ── TARIF KATEGORIEN ── */
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 48px; }
+    .cat-card {
+      background: var(--surface); border-radius: var(--radius); border: 1.5px solid var(--border);
+      padding: 28px 24px; cursor: pointer; transition: border-color .2s, box-shadow .2s, transform .2s;
+      position: relative; overflow: hidden;
+    }
+    .cat-card:hover { border-color: var(--accent); box-shadow: var(--shadow); transform: translateY(-3px); }
+    .cat-card.popular::before {
+      content: 'Beliebt';
+      position: absolute; top: 14px; right: -1px;
+      background: var(--accent); color: #fff; font-size: .7rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 4px 0 0 4px;
+    }
+    .cat-icon { font-size: 2rem; margin-bottom: 14px; }
+    .cat-card h3 { margin-bottom: 8px; }
+    .cat-card p { font-size: .88rem; color: var(--ink-soft); line-height: 1.5; }
+    .cat-from { margin-top: 16px; font-size: .82rem; color: var(--ink-mute); }
+    .cat-from strong { color: var(--accent); font-size: 1rem; }
+
+    /* ── HOW IT WORKS ── */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; margin-top: 48px; position: relative; }
+    .step { text-align: center; }
+    .step-num {
+      width: 52px; height: 52px; border-radius: 50%; background: var(--accent);
+      color: #fff; font-size: 1.3rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .step h3 { margin-bottom: 8px; }
+    .step p { font-size: .88rem; color: var(--ink-soft); }
+
+    /* ── VERGLEICHSTABELLE ── */
+    .compare-wrap { overflow-x: auto; margin-top: 48px; border-radius: var(--radius); box-shadow: var(--shadow); }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); }
+    thead { background: var(--ink); color: #fff; }
+    thead th { padding: 16px 20px; text-align: left; font-size: .85rem; font-weight: 600; }
+    thead th:first-child { border-radius: var(--radius) 0 0 0; }
+    thead th:last-child { border-radius: 0 var(--radius) 0 0; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:hover { background: #f0f5ff; }
+    tbody tr:last-child { border-bottom: none; }
+    td { padding: 15px 20px; font-size: .9rem; vertical-align: middle; }
+    td:first-child { font-weight: 600; color: var(--ink); }
+    .badge-green { background: #e6f9f2; color: #007a52; font-size: .75rem; font-weight: 700; padding: 3px 8px; border-radius: 20px; }
+    .badge-gold  { background: #fff8e6; color: #a07000; font-size: .75rem; font-weight: 700; padding: 3px 8px; border-radius: 20px; }
+    .check-yes { color: var(--green); font-size: 1.1rem; }
+    .check-no  { color: var(--ink-mute); }
+    .btn-table {
+      background: var(--accent); color: #fff; border: none; padding: 8px 16px;
+      border-radius: 6px; font-size: .8rem; font-weight: 700; cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-table:hover { background: var(--accent-h); }
+
+    /* ── FAQ ── */
+    .faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--surface); border-radius: var(--radius); border: 1.5px solid var(--border);
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%; padding: 20px 24px; text-align: left; background: none; border: none;
+      font-size: 1rem; font-weight: 600; color: var(--ink); cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: color .2s;
+    }
+    .faq-q:hover { color: var(--accent); }
+    .faq-icon { font-size: 1.3rem; transition: transform .25s; }
+    .faq-a { padding: 0 24px; max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s ease; color: var(--ink-soft); font-size: .92rem; line-height: 1.7; }
+    .faq-item.open .faq-a { max-height: 400px; padding: 0 24px 20px; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    /* ── BLOG PREVIEW ── */
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 48px; }
+    .blog-card {
+      background: var(--surface); border-radius: var(--radius); border: 1.5px solid var(--border);
+      overflow: hidden; transition: box-shadow .2s, transform .2s;
+    }
+    .blog-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+    .blog-thumb {
+      height: 160px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+    }
+    .blog-thumb-1 { background: linear-gradient(135deg, #e8f4fd, #c5e2fa); }
+    .blog-thumb-2 { background: linear-gradient(135deg, #fef3e8, #fddbb4); }
+    .blog-thumb-3 { background: linear-gradient(135deg, #e8fdf5, #b4f0d6); }
+    .blog-body { padding: 20px; }
+    .blog-tag {
+      display: inline-block; background: #eef3ff; color: var(--accent);
+      font-size: .72rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; margin-bottom: 10px;
+    }
+    .blog-card h3 { font-size: 1rem; margin-bottom: 8px; line-height: 1.4; }
+    .blog-card p { font-size: .85rem; color: var(--ink-soft); }
+    .blog-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: .78rem; color: var(--ink-mute); }
+    .blog-read { color: var(--accent); font-weight: 600; text-decoration: none; }
+
+    /* ── CTA BAND ── */
+    .cta-band {
+      background: linear-gradient(135deg, #0057ff, #0e1b2a);
+      color: #fff; text-align: center; padding: 80px 0;
+    }
+    .cta-band h2 { color: #fff; margin-bottom: 16px; }
+    .cta-band p { color: #c8d8ee; max-width: 520px; margin: 0 auto 32px; }
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-white {
+      background: #fff; color: var(--accent); border: none; border-radius: 8px;
+      padding: 14px 32px; font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: background .2s, transform .1s; text-decoration: none;
+    }
+    .btn-white:hover { background: #e8f0ff; transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.4);
+      border-radius: 8px; padding: 14px 32px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: border-color .2s; text-decoration: none;
+    }
+    .btn-ghost:hover { border-color: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink); color: #8aaecf; padding: 48px 0 24px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    footer h4 { color: #fff; font-size: .9rem; margin-bottom: 14px; }
+    footer ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    footer a { color: #8aaecf; text-decoration: none; font-size: .85rem; transition: color .2s; }
+    footer a:hover { color: #fff; }
+    .footer-logo { font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 12px; }
+    .footer-logo span { color: #5da8ff; }
+    .footer-desc { font-size: .85rem; line-height: 1.7; max-width: 240px; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.1); padding-top: 20px;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      font-size: .8rem;
+    }
+    .footer-legal { display: flex; gap: 20px; }
+    @media (max-width: 760px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-bottom { flex-direction: column; }
+    }
+    @media (max-width: 480px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-wrap: wrap; gap: 16px; }
+    }
+
+    /* ── SCROLL ANIMATION ── */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <h1>Krankenzusatzversicherung Vergleich</h1>
-      <p>Finden Sie die beste Zusatzversicherung für Ihre Bedürfnisse.</p>
-    </div>
-  </header>
 
-  <main class="container">
-    <section class="hero">
-      <h2>Jetzt vergleichen und sparen</h2>
-      <p>Wir vergleichen die besten Krankenzusatzversicherungen für Sie – kostenlos und unverbindlich.</p>
-    </section>
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="container nav-inner">
+    <a class="nav-logo" href="/">kranken<span>zusatz</span>-vergleich.de</a>
+    <ul class="nav-links">
+      <li><a href="#kategorien">Tarife</a></li>
+      <li><a href="#vergleich">Vergleich</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#blog">Ratgeber</a></li>
+    </ul>
+    <a class="nav-cta" href="#vergleich-starten">Jetzt vergleichen</a>
+  </div>
+</nav>
 
-    <section class="blog" id="blog">
-      <h2>Aktuelle Beiträge</h2>
-      <div class="blog-grid" id="blog-grid">
-        <!-- Blog-Beiträge werden hier dynamisch geladen -->
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <div class="hero-badge">Täglich aktualisiert · Unabhängig · Kostenlos</div>
+      <h1>Die Zusatzversicherung, die deine Krankenkasse <em>nicht bezahlt</em></h1>
+      <p class="hero-sub">GKV-Versicherte zahlen im Schnitt 1.840 € jährlich aus eigener Tasche. Die passende Krankenzusatzversicherung übernimmt das – für oft weniger als ein Restaurantbesuch im Monat.</p>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong>340+</strong>
+          <span>Tarife verglichen</span>
+        </div>
+        <div class="hero-stat">
+          <strong>87%</strong>
+          <span>sparen über 400 €/Jahr</span>
+        </div>
+        <div class="hero-stat">
+          <strong>ab 8 €</strong>
+          <span>monatlich</span>
+        </div>
       </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>&copy; 2026 krankenzusatz-vergleich.de &nbsp;|&nbsp;
-        <a href="/impressum.html">Impressum</a> &nbsp;|&nbsp;
-        <a href="/datenschutz.html">Datenschutz</a>
-      </p>
     </div>
-  </footer>
 
-  <script src="/js/main.js"></script>
+    <!-- Widget -->
+    <div class="hero-widget" id="vergleich-starten">
+      <h3>Kostenloser Tarifcheck</h3>
+      <p class="widget-sub">Dauer: 2 Minuten · Keine Anmeldung nötig</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="versicherungsart">Welche Zusatzversicherung?</label>
+          <select id="versicherungsart">
+            <option value="">Bitte wählen …</option>
+            <option>🦷 Zahnzusatzversicherung</option>
+            <option>🏥 Krankenhaustagegeld</option>
+            <option>✈️ Auslandsreisekrankenversicherung</option>
+            <option>🌿 Heilpraktiker & Alternativmedizin</option>
+            <option>👁️ Sehhilfen & Brillenzusatz</option>
+            <option>🧘 Vorsorge & Gesundheitskurse</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="geburtsjahr">Geburtsjahr</label>
+          <input type="number" id="geburtsjahr" placeholder="z. B. 1985" min="1940" max="2008" />
+        </div>
+        <div class="form-group">
+          <label>Wichtig für mich:</label>
+          <div class="checkbox-row">
+            <label class="check-item"><input type="checkbox" checked /> Niedriger Beitrag</label>
+            <label class="check-item"><input type="checkbox" /> Hohe Erstattung</label>
+            <label class="check-item"><input type="checkbox" /> Kein Wartezeit</label>
+            <label class="check-item"><input type="checkbox" /> Familienrate</label>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="startVergleich()">
+          ⚡ Tarife jetzt vergleichen
+        </button>
+      </div>
+      <div class="widget-trust">Datenschutzkonform · DSGVO · keine Datenweitergabe ohne Einwilligung</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRUST BAR ═══ -->
+<div class="trust-bar">
+  <div class="container">
+    <div class="trust-items">
+      <div class="trust-item"><span class="trust-icon">🏆</span> Testsieger-Tarife 2026</div>
+      <div class="trust-item"><span class="trust-icon">🔍</span> 340+ Tarife täglich geprüft</div>
+      <div class="trust-item"><span class="trust-icon">💶</span> Kein Versteck-Preis</div>
+      <div class="trust-item"><span class="trust-icon">📋</span> Unabhängige Redaktion</div>
+      <div class="trust-item"><span class="trust-icon">🇩🇪</span> Nur geprüfte DE-Anbieter</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SCHRECKENSZAHLEN ═══ -->
+<section class="fright-section">
+  <div class="container">
+    <div class="fright-grid reveal">
+      <div>
+        <span class="fright-number">1.840 €</span>
+        <p class="fright-label">zahlen GKV-Versicherte <strong>jährlich selbst</strong> für Gesundheitsleistungen</p>
+      </div>
+      <div>
+        <span class="fright-number">78 %</span>
+        <p class="fright-label">aller Zahnersatz-Rechnungen werden von der GKV <strong>nicht voll erstattet</strong></p>
+      </div>
+      <div>
+        <span class="fright-number">42 Tage</span>
+        <p class="fright-label">beträgt die <strong>Wartezeit auf Facharzttermine</strong> ohne private Zusatzversicherung</p>
+      </div>
+      <div>
+        <span class="fright-number">ab 8 €</span>
+        <p class="fright-label">monatlich kostet eine <strong>sinnvolle Grundabsicherung</strong> mit Zusatzschutz</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ KATEGORIEN ═══ -->
+<section class="section section--alt" id="kategorien">
+  <div class="container">
+    <p class="eyebrow">Versicherungsarten</p>
+    <h2>Welche Zusatzversicherung passt zu dir?</h2>
+    <p style="color:var(--ink-soft); margin-top:12px; max-width:600px;">Jeder Bedarf ist anders. Ob Zahn, Krankenhaus oder Ausland – wir vergleichen für dich die besten Tarife.</p>
+
+    <div class="cat-grid reveal">
+      <div class="cat-card popular" onclick="selectKat('Zahn')">
+        <div class="cat-icon">🦷</div>
+        <h3>Zahnzusatzversicherung</h3>
+        <p>Bis zu 100 % Erstattung für Zahnersatz, Implantate und Kieferorthopädie. Dein Schutz vor dem teuersten Kostenblock.</p>
+        <p class="cat-from">ab <strong>9 € / Monat</strong></p>
+      </div>
+      <div class="cat-card" onclick="selectKat('Krankenhaus')">
+        <div class="cat-icon">🏥</div>
+        <h3>Krankenhaustagegeld</h3>
+        <p>Chefarztbehandlung, Einbettzimmer und tägliches Krankenhausgeld. Du entscheidest, wer dich behandelt.</p>
+        <p class="cat-from">ab <strong>12 € / Monat</strong></p>
+      </div>
+      <div class="cat-card" onclick="selectKat('Ausland')">
+        <div class="cat-icon">✈️</div>
+        <h3>Auslandsreise­kranken­versicherung</h3>
+        <p>Weltweiter Schutz für Arzt, Krankenhaus und Rücktransport. Unverzichtbar für Reisende – oft ab 8 € jährlich.</p>
+        <p class="cat-from">ab <strong>8 € / Jahr</strong></p>
+      </div>
+      <div class="cat-card" onclick="selectKat('Heilpraktiker')">
+        <div class="cat-icon">🌿</div>
+        <h3>Heilpraktiker & Alternativmedizin</h3>
+        <p>Akupunktur, Homöopathie, Osteopathie – die GKV zahlt kaum. Mit der richtigen Zusatzversicherung schon.</p>
+        <p class="cat-from">ab <strong>15 € / Monat</strong></p>
+      </div>
+      <div class="cat-card" onclick="selectKat('Sehhilfe')">
+        <div class="cat-icon">👁️</div>
+        <h3>Sehhilfen & Brille</h3>
+        <p>Brillen, Kontaktlinsen und Lasik-Operationen sind teuer. Die GKV zahlt fast nichts – deine Zusatzversicherung dafür umso mehr.</p>
+        <p class="cat-from">ab <strong>10 € / Monat</strong></p>
+      </div>
+      <div class="cat-card" onclick="selectKat('Vorsorge')">
+        <div class="cat-icon">🧘</div>
+        <h3>Vorsorge & Gesundheit</h3>
+        <p>Professionelle Zahnreinigung, Vorsorgeuntersuchungen und Fitnesskurse – präventiv absichern und dabei sparen.</p>
+        <p class="cat-from">ab <strong>18 € / Monat</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SO FUNKTIONIERT ES ═══ -->
+<section class="section">
+  <div class="container">
+    <p class="eyebrow">Einfach & schnell</p>
+    <h2>In 3 Schritten zur richtigen Zusatzversicherung</h2>
+
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Bedarf auswählen</h3>
+        <p>Was soll abgesichert sein? Zahn, Krankenhaus, Ausland oder Heilpraktiker – du wählst, wir filtern.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Tarife vergleichen</h3>
+        <p>Unsere Datenbank zeigt dir die 10 besten Tarife – sortiert nach Preis-Leistung, nicht nach Provision.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Direkt abschließen</h3>
+        <p>Klick direkt zum Anbieter. Kein Umweg, kein Callcenter. Versicherungsschutz in unter 10 Minuten.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VERGLEICHSTABELLE ═══ -->
+<section class="section section--alt" id="vergleich">
+  <div class="container">
+    <p class="eyebrow">Aktueller Vergleich</p>
+    <h2>Die besten Zahnzusatzversicherungen 2026</h2>
+    <p style="color:var(--ink-soft); margin-top:12px; margin-bottom: 0; max-width:600px;">Zuletzt aktualisiert: Juni 2026 · Alle Tarife unabhängig geprüft</p>
+
+    <div class="compare-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th>Anbieter / Tarif</th>
+            <th>Beitrag/Monat</th>
+            <th>Erstattung Zahnersatz</th>
+            <th>Wartezeit</th>
+            <th>Kieferorthopädie</th>
+            <th>Bewertung</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>DKV ZahnPremium Plus</td>
+            <td><strong>28,40 €</strong></td>
+            <td>100 %</td>
+            <td>keine</td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="badge-green">★ 4,9 – Testsieger</span></td>
+            <td><button class="btn-table">Zum Tarif</button></td>
+          </tr>
+          <tr>
+            <td>Allianz DentalPro</td>
+            <td><strong>24,90 €</strong></td>
+            <td>90 %</td>
+            <td>keine</td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="badge-green">★ 4,7 – Sehr gut</span></td>
+            <td><button class="btn-table">Zum Tarif</button></td>
+          </tr>
+          <tr>
+            <td>Hallesche NaturPro</td>
+            <td><strong>19,70 €</strong></td>
+            <td>80 %</td>
+            <td>3 Monate</td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="badge-gold">★ 4,4 – Gut</span></td>
+            <td><button class="btn-table">Zum Tarif</button></td>
+          </tr>
+          <tr>
+            <td>AXA Zahn Komfort</td>
+            <td><strong>16,20 €</strong></td>
+            <td>80 %</td>
+            <td>keine</td>
+            <td><span class="check-no">–</span></td>
+            <td><span class="badge-gold">★ 4,2 – Gut</span></td>
+            <td><button class="btn-table">Zum Tarif</button></td>
+          </tr>
+          <tr>
+            <td>ERGO Direkt Zahn Start</td>
+            <td><strong>9,90 €</strong></td>
+            <td>70 %</td>
+            <td>keine</td>
+            <td><span class="check-no">–</span></td>
+            <td><span class="badge-gold">★ 3,9 – Solide</span></td>
+            <td><button class="btn-table">Zum Tarif</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:var(--ink-mute); font-size:.78rem; margin-top:12px;">* Beispielbeiträge für 35-jährige Person ohne Vorerkrankungen. Individuelle Berechnung im Tarifcheck.</p>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="section" id="faq">
+  <div class="container">
+    <p class="eyebrow">Häufige Fragen</p>
+    <h2>Alles, was du über Krankenzusatzversicherungen wissen musst</h2>
+
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Was ist eine Krankenzusatzversicherung und wer braucht sie?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Eine Krankenzusatzversicherung ergänzt die Leistungen der gesetzlichen Krankenversicherung (GKV). Die GKV übernimmt zwar die Grundversorgung – aber Zahnersatz, Chefarztbehandlung, Auslandsreiseschutz oder Heilpraktikerkosten bleiben oft an dir hängen. Besonders sinnvoll ist sie für Menschen, die Wert auf hochwertige Versorgung legen, häufig reisen oder absehbare Zahnbehandlungen planen.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Lohnt sich eine Zusatzversicherung für GKV-Versicherte?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Ja, in den meisten Fällen klar. Der Eigenanteil bei einer Zahnkrone liegt schnell bei 700–1.500 €. Eine Zahnzusatzversicherung für 20 €/Monat erstattet das vollständig. Schon nach einem einzigen Zahnersatz hat sie sich bezahlt gemacht. Ähnliches gilt für Krankenhausaufenthalte: Einbettzimmer und Chefarztbehandlung kosten ohne Zusatzversicherung täglich 80–400 € extra.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Gibt es Wartezeiten bei Krankenzusatzversicherungen?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Das hängt vom Tarif ab. Viele Anbieter haben keine Wartezeiten – besonders bei Abschluss ohne laufende Behandlungen. Einige Tarife sehen 3 Monate allgemeine Wartezeit oder 8 Monate bei Zahnbehandlungen vor. Im Vergleich zeigen wir dir transparent, welche Tarife sofortige Leistungspflicht bieten.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Kann ich trotz Vorerkrankungen eine Krankenzusatzversicherung abschließen?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Ja, aber mit Einschränkungen. Einige Anbieter schließen Vorerkrankungen vom Schutz aus oder erheben Risikozuschläge. Es gibt auch Tarife ohne Gesundheitsfragen – diese sind meist teurer, aber für Menschen mit Vorerkrankungen oft die einzige Option. Unser Vergleich filtert gezielt nach solchen Tarifen.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Was kostet eine Krankenzusatzversicherung im Durchschnitt?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Das hängt stark von Alter, Leistungsumfang und Anbieter ab. Einfache Auslandsreisekrankenversicherungen gibt es ab 8 € jährlich. Gute Zahnzusatztarife beginnen bei ca. 9–15 € monatlich. Umfassende Kombi-Tarife (Zahn + Krankenhaus + Heilpraktiker) kosten zwischen 40 und 120 € im Monat. Unser Tarifcheck findet das beste Preis-Leistungs-Verhältnis für dein Alter.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Kann ich mehrere Zusatzversicherungen kombinieren?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Ja, das ist sogar empfehlenswert. Oft ist es günstiger, spezialisierte Einzeltarife zu kombinieren (z. B. Zahn bei Anbieter A, Ausland bei Anbieter B), als einen teuren Kombi-Tarif abzuschließen. Unser Vergleich zeigt dir beide Optionen transparent nebeneinander.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BLOG PREVIEW ═══ -->
+<section class="section section--alt" id="blog">
+  <div class="container">
+    <p class="eyebrow">Ratgeber & Aktuelles</p>
+    <h2>Täglich neue Artikel rund um Krankenversicherung</h2>
+    <p style="color:var(--ink-soft); margin-top:12px; max-width:560px;">Unser Redaktionsteam veröffentlicht täglich 3 neue Beiträge – auf Deutsch und Englisch.</p>
+
+    <div class="blog-grid reveal">
+      <div class="blog-card">
+        <div class="blog-thumb blog-thumb-1">🦷</div>
+        <div class="blog-body">
+          <span class="blog-tag">Zahnzusatz</span>
+          <h3>Zahnersatz 2026: Was zahlt die Kasse – und was nicht?</h3>
+          <p>GKV-Festzuschüsse decken oft nur 60 %. Wir erklären, wo die Lücken sind und welche Tarife wirklich helfen.</p>
+          <div class="blog-meta">
+            <span>12. Juni 2026</span>
+            <a class="blog-read" href="#">Weiterlesen →</a>
+          </div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-thumb blog-thumb-2">🏥</div>
+        <div class="blog-body">
+          <span class="blog-tag">Krankenhaus</span>
+          <h3>Chefarztbehandlung: Lohnt sich das Krankenhauszusatz wirklich?</h3>
+          <p>Wir haben 5 Anbieter verglichen und zeigen, wann sich eine Krankenhauspolice rechnet – und wann nicht.</p>
+          <div class="blog-meta">
+            <span>10. Juni 2026</span>
+            <a class="blog-read" href="#">Weiterlesen →</a>
+          </div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-thumb blog-thumb-3">🌿</div>
+        <div class="blog-body">
+          <span class="blog-tag">Heilpraktiker</span>
+          <h3>Osteopathie, Akupunktur & Co: Was deine GKV wirklich erstattet</h3>
+          <p>Alternativmedizin boomt – aber die gesetzliche Kasse zahlt kaum etwas. Die Lösung: der richtige Zusatztarif.</p>
+          <div class="blog-meta">
+            <span>8. Juni 2026</span>
+            <a class="blog-read" href="#">Weiterlesen →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA BAND ═══ -->
+<section class="cta-band">
+  <div class="container">
+    <h2>Hör auf, für Leistungen zu zahlen, die deine Versicherung übernehmen könnte.</h2>
+    <p>Kostenloser Tarifcheck · Unabhängig · In 2 Minuten fertig · Keine Anmeldung nötig</p>
+    <div class="cta-btns">
+      <a class="btn-white" href="#vergleich-starten">Jetzt kostenlos vergleichen</a>
+      <a class="btn-ghost" href="#kategorien">Alle Tarife ansehen</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">kranken<span>zusatz</span>-vergleich.de</div>
+        <p class="footer-desc">Unabhängiger Vergleich für Krankenzusatzversicherungen. Täglich aktualisiert. Kein Verkauf von Daten. Keine versteckten Provisionen.</p>
+      </div>
+      <div>
+        <h4>Versicherungen</h4>
+        <ul>
+          <li><a href="#">Zahnzusatz</a></li>
+          <li><a href="#">Krankenhaus</a></li>
+          <li><a href="#">Auslandsreise</a></li>
+          <li><a href="#">Heilpraktiker</a></li>
+          <li><a href="#">Sehhilfen</a></li>
+          <li><a href="#">Vorsorge</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Ratgeber</h4>
+        <ul>
+          <li><a href="#">Blog DE</a></li>
+          <li><a href="#">Blog EN</a></li>
+          <li><a href="#">GKV vs. PKV</a></li>
+          <li><a href="#">Für Familien</a></li>
+          <li><a href="#">Für Senioren</a></li>
+          <li><a href="#">Glossar</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="#">Impressum</a></li>
+          <li><a href="#">Datenschutz</a></li>
+          <li><a href="#">Cookie-Einstellungen</a></li>
+          <li><a href="#">Erstinformation</a></li>
+          <li><a href="#">Über uns</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 krankenzusatz-vergleich.de · Alle Angaben ohne Gewähr · Kein Finanzberatungsersatz</span>
+      <div class="footer-legal">
+        <a href="#">Impressum</a>
+        <a href="#">Datenschutz</a>
+        <a href="#">AGB</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Scroll Reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── FAQ Toggle
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // ── Kategorie auswählen → Widget updaten
+  function selectKat(kat) {
+    const map = {
+      'Zahn':         '🦷 Zahnzusatzversicherung',
+      'Krankenhaus':  '🏥 Krankenhaustagegeld',
+      'Ausland':      '✈️ Auslandsreisekrankenversicherung',
+      'Heilpraktiker':'🌿 Heilpraktiker & Alternativmedizin',
+      'Sehhilfe':     '👁️ Sehhilfen & Brillenzusatz',
+      'Vorsorge':     '🧘 Vorsorge & Gesundheitskurse',
+    };
+    const sel = document.getElementById('versicherungsart');
+    for (let i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].text === map[kat]) { sel.selectedIndex = i; break; }
+    }
+    document.getElementById('vergleich-starten').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // ── Vergleich starten
+  function startVergleich() {
+    const art = document.getElementById('versicherungsart').value;
+    const jahr = document.getElementById('geburtsjahr').value;
+    if (!art) { alert('Bitte wähle zuerst eine Versicherungsart.'); return; }
+    if (!jahr || jahr < 1940 || jahr > 2008) { alert('Bitte gib ein gültiges Geburtsjahr ein.'); return; }
+    // Hier würde die Weiterleitung zum Vergleichsrechner erfolgen
+    alert(`✅ Tarifcheck gestartet!\n\nVersicherung: ${art}\nJahrgang: ${jahr}\n\nHier käme dein Vergleichsrechner / Affiliate-Partner.`);
+  }
+</script>
 </body>
 </html>
