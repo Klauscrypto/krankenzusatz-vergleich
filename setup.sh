@@ -109,17 +109,20 @@ if ! command -v "php${PHP_VER}" &>/dev/null; then
         LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
         apt-get update -qq
     fi
-    apt-get install -y -qq \
-        "php${PHP_VER}-fpm"     \
-        "php${PHP_VER}-mysql"   \
-        "php${PHP_VER}-xml"     \
-        "php${PHP_VER}-curl"    \
-        "php${PHP_VER}-mbstring"\
-        "php${PHP_VER}-zip"     \
-        "php${PHP_VER}-gd"      \
-        "php${PHP_VER}-intl"    \
-        "php${PHP_VER}-bcmath"  \
-        "php${PHP_VER}-opcache"
+    PHP_PKGS=(
+        "php${PHP_VER}-fpm"
+        "php${PHP_VER}-mysql"
+        "php${PHP_VER}-xml"
+        "php${PHP_VER}-curl"
+        "php${PHP_VER}-mbstring"
+        "php${PHP_VER}-zip"
+        "php${PHP_VER}-gd"
+        "php${PHP_VER}-intl"
+        "php${PHP_VER}-bcmath"
+    )
+    # opcache ist ab Ubuntu 26 in php-common eingebaut
+    apt-cache show "php${PHP_VER}-opcache" &>/dev/null && PHP_PKGS+=("php${PHP_VER}-opcache") || true
+    apt-get install -y -qq "${PHP_PKGS[@]}"
     systemctl enable "php${PHP_VER}-fpm"
     ok "PHP ${PHP_VER} installiert"
 else
@@ -308,11 +311,15 @@ fi
 
 # ── .ENV TEMPLATE FÜR ARTIKEL-GENERATOR ─────────────────────────
 info "Python-Dependencies installieren..."
+PIP_FLAGS="-q"
+# Ubuntu 26+ verwaltet Python extern – break-system-packages nötig
+python3 -c "import sys; exit(0 if sys.version_info >= (3,12) else 1)" 2>/dev/null && \
+    PIP_FLAGS="-q --break-system-packages" || true
 if [[ -f "${SCRIPTS_DIR}/requirements.txt" ]]; then
-    pip3 install -q -r "${SCRIPTS_DIR}/requirements.txt"
+    pip3 install ${PIP_FLAGS} -r "${SCRIPTS_DIR}/requirements.txt"
     ok "Python-Packages installiert"
 else
-    pip3 install -q anthropic python-dotenv requests 2>/dev/null && ok "Python-Packages installiert" || \
+    pip3 install ${PIP_FLAGS} anthropic python-dotenv requests && ok "Python-Packages installiert" || \
         warn "pip3 install fehlgeschlagen – manuell ausführen"
 fi
 
@@ -454,7 +461,7 @@ if [[ ! -f "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem" ]]; then
         --staple-ocsp
     ok "SSL-Zertifikat ausgestellt + HTTP→HTTPS Redirect aktiv"
 else
-    certbot renew --quiet --nginx
+    certbot renew --quiet --nginx || true
     skip "SSL-Zertifikat (vorhanden, Renewal geprüft)"
 fi
 
