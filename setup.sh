@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ════════════════════════════════════════════════════════════════
 #  setup.sh – krankenzusatz-vergleich.de
-#  Hetzner Ubuntu 24.04 · Nginx · PHP 8.3 · MariaDB · WordPress
+#  Hetzner Ubuntu 24.04/26.04 · Nginx · PHP · MariaDB · WordPress
 #  Idempotent: mehrfach ausführbar ohne Fehler
 #
 #  Verwendung:
@@ -14,7 +14,15 @@ set -euo pipefail
 DOMAIN="${DOMAIN:-krankenzusatz-vergleich.de}"
 EMAIL="${EMAIL:-info@pilsner-vertrieb.de}"
 REPO_URL="${REPO_URL:-}"          # optional: GitHub-Repo-URL für direktes Deployment
-PHP_VER="8.3"
+
+# PHP-Version automatisch erkennen: 8.3 per PPA auf Ubuntu 24, 8.5 nativ auf Ubuntu 26+
+if grep -q 'Ubuntu 26\|Ubuntu 2[7-9]\|noble\|resolute' /etc/os-release 2>/dev/null; then
+    PHP_VER="${PHP_VER:-8.5}"
+    PHP_FROM_PPA=false
+else
+    PHP_VER="${PHP_VER:-8.3}"
+    PHP_FROM_PPA=true
+fi
 
 # Pfade (webroot muss mit deploy.yml übereinstimmen: target="/var/www/krankenzusatz-vergleich")
 WEBROOT="/var/www/krankenzusatz-vergleich"
@@ -94,16 +102,17 @@ else
 fi
 # ─────────────────────────────────────────────────────────────────
 
-# ── PHP 8.3 ──────────────────────────────────────────────────────
+# ── PHP ──────────────────────────────────────────────────────────
 info "PHP ${PHP_VER} prüfen / installieren..."
 if ! command -v "php${PHP_VER}" &>/dev/null; then
-    LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
-    apt-get update -qq
+    if [[ "${PHP_FROM_PPA}" == "true" ]]; then
+        LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
+        apt-get update -qq
+    fi
     apt-get install -y -qq \
         "php${PHP_VER}-fpm"     \
         "php${PHP_VER}-mysql"   \
         "php${PHP_VER}-xml"     \
-        "php${PHP_VER}-xmlrpc"  \
         "php${PHP_VER}-curl"    \
         "php${PHP_VER}-mbstring"\
         "php${PHP_VER}-zip"     \
