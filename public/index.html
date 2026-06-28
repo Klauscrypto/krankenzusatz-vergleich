@@ -406,6 +406,67 @@
       .wa-btn { bottom: 86px; right: 16px; width: 52px; height: 52px; }
     }
 
+    /* ── EXIT INTENT POPUP ── */
+    .ei-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(10,22,40,.75); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .ei-overlay.show { opacity: 1; pointer-events: all; }
+    .ei-box {
+      background: #fff; border-radius: var(--radius-lg); max-width: 520px; width: 100%;
+      overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,.35);
+      transform: translateY(30px) scale(.97); transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+      position: relative;
+    }
+    .ei-overlay.show .ei-box { transform: translateY(0) scale(1); }
+    .ei-close {
+      position: absolute; top: 14px; right: 14px; width: 32px; height: 32px;
+      border-radius: 50%; border: none; background: rgba(0,0,0,.08); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+      color: var(--gray-600); transition: background .2s;
+    }
+    .ei-close:hover { background: rgba(0,0,0,.16); }
+    .ei-head {
+      background: linear-gradient(135deg, var(--navy) 0%, #0057ff 100%);
+      padding: 32px 32px 28px; text-align: center;
+    }
+    .ei-badge {
+      display: inline-block; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3);
+      border-radius: 50px; padding: 4px 14px; font-size: .72rem; font-weight: 800;
+      color: rgba(255,255,255,.9); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .ei-head h2 { font-size: 1.5rem; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 8px; }
+    .ei-head p { font-size: .9rem; color: rgba(255,255,255,.75); }
+    .ei-body { padding: 28px 32px 32px; }
+    .ei-offers { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .ei-offer {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--blue-light); border-radius: var(--radius-sm); padding: 11px 14px;
+    }
+    .ei-offer-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .ei-offer-text { font-size: .88rem; color: var(--navy); font-weight: 600; }
+    .ei-offer-sub { font-size: .77rem; color: var(--gray-600); margin-top: 1px; }
+    .ei-cta {
+      display: block; width: 100%; padding: 16px; background: var(--coral); color: #fff;
+      border: none; border-radius: var(--radius-sm); font-size: 1rem; font-weight: 800;
+      cursor: pointer; text-align: center; transition: background .2s, transform .15s; font-family: inherit;
+    }
+    .ei-cta:hover { background: var(--coral-dark); transform: translateY(-1px); }
+    .ei-dismiss {
+      display: block; width: 100%; margin-top: 12px; background: none; border: none;
+      font-size: .8rem; color: var(--gray-400); cursor: pointer; text-align: center;
+      font-family: inherit; padding: 4px; transition: color .2s;
+    }
+    .ei-dismiss:hover { color: var(--gray-600); }
+    @media (max-width: 480px) {
+      .ei-head { padding: 24px 20px 20px; }
+      .ei-body { padding: 20px 20px 24px; }
+      .ei-head h2 { font-size: 1.25rem; }
+    }
+
     /* ── ANIMATIONS ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
@@ -865,6 +926,47 @@
   </div>
 </footer>
 
+<!-- Exit Intent Popup -->
+<div class="ei-overlay" id="exitPopup" role="dialog" aria-modal="true" aria-label="Angebot">
+  <div class="ei-box">
+    <button class="ei-close" onclick="closeExit()" aria-label="Schließen">✕</button>
+    <div class="ei-head">
+      <div class="ei-badge">Warten Sie kurz!</div>
+      <h2>Noch kein Vergleich gemacht?</h2>
+      <p>Viele GKV-Versicherte zahlen jährlich hunderte Euro zu viel — oder zu wenig geschützt.</p>
+    </div>
+    <div class="ei-body">
+      <div class="ei-offers">
+        <div class="ei-offer">
+          <div class="ei-offer-icon">🦷</div>
+          <div>
+            <div class="ei-offer-text">Zahnersatz bis zu 100% gedeckt</div>
+            <div class="ei-offer-sub">Statt nur 60% durch die GKV – ab 8 €/Monat</div>
+          </div>
+        </div>
+        <div class="ei-offer">
+          <div class="ei-offer-icon">🏥</div>
+          <div>
+            <div class="ei-offer-text">Chefarzt & Einzelzimmer im Krankenhaus</div>
+            <div class="ei-offer-sub">Private Versorgung ohne PKV – ab 12 €/Monat</div>
+          </div>
+        </div>
+        <div class="ei-offer">
+          <div class="ei-offer-icon">📞</div>
+          <div>
+            <div class="ei-offer-text">Kostenlose persönliche Beratung</div>
+            <div class="ei-offer-sub">Antwort innerhalb von 24 Stunden – 0 € für Sie</div>
+          </div>
+        </div>
+      </div>
+      <button class="ei-cta" onclick="closeExit(); document.getElementById('empfehlung').scrollIntoView({behavior:'smooth'})">
+        Jetzt kostenlos Beratung anfragen →
+      </button>
+      <button class="ei-dismiss" onclick="closeExit()">Nein danke, ich bleibe unversichert.</button>
+    </div>
+  </div>
+</div>
+
 <!-- WhatsApp Floating Button -->
 <a class="wa-btn" href="https://wa.me/4999319819500?text=Hallo%2C%20ich%20interessiere%20mich%20f%C3%BCr%20eine%20Krankenzusatzversicherung." target="_blank" rel="noopener" aria-label="WhatsApp Beratung">
   <span class="wa-tooltip">Jetzt auf WhatsApp schreiben</span>
@@ -980,6 +1082,55 @@
     });
   }, { threshold: 0.1 });
   document.querySelectorAll('.type-card, .trust-item, .tcard, .process-step').forEach(el => obsCallback.observe(el));
+
+  // ── Exit Intent ──
+  (function() {
+    const KEY = 'ei_shown';
+    if (sessionStorage.getItem(KEY)) return;
+
+    let triggered = false;
+    let pageTime = 0;
+    const timer = setInterval(() => { pageTime++; }, 1000);
+
+    function showPopup() {
+      if (triggered) return;
+      if (pageTime < 8) return; // min. 8 Sek. auf der Seite
+      triggered = true;
+      clearInterval(timer);
+      sessionStorage.setItem(KEY, '1');
+      document.getElementById('exitPopup').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Desktop: Maus verlässt oberen Bereich (Richtung Tab-Leiste)
+    document.addEventListener('mouseleave', (e) => {
+      if (e.clientY <= 10) showPopup();
+    });
+
+    // Mobile: schnelles Scrollen nach oben
+    let lastY = window.scrollY;
+    window.addEventListener('scroll', () => {
+      const currentY = window.scrollY;
+      if (lastY - currentY > 80 && currentY < 200) showPopup();
+      lastY = currentY;
+    }, { passive: true });
+
+    // Overlay-Klick schließt
+    document.getElementById('exitPopup').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('exitPopup')) closeExit();
+    });
+
+    // ESC schließt
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeExit();
+    });
+  })();
+
+  function closeExit() {
+    const el = document.getElementById('exitPopup');
+    el.classList.remove('show');
+    document.body.style.overflow = '';
+  }
 </script>
 </body>
 </html>
