@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-artikel-generator.py – Aufgabe 5
-Generiert Blogartikel zu Krankenzusatzversicherungen via Claude API
-und veröffentlicht sie direkt in WordPress.
+artikel-generator.py
+Generiert hochwertige Blogartikel (1500–2500 Wörter) via Claude API
+und veröffentlicht sie in WordPress. 1× täglich, nur DE.
 
 Verwendung:
   python3 artikel-generator.py --lang=de
-  python3 artikel-generator.py --lang=en
+  python3 artikel-generator.py --dry-run
 """
 
 import argparse
@@ -15,7 +15,6 @@ import os
 import sys
 import json
 import random
-import hashlib
 import logging
 from datetime import datetime
 from pathlib import Path
@@ -24,14 +23,23 @@ import anthropic
 from dotenv import load_dotenv
 from publish_artikel import publish_to_wordpress
 
-# ── KONFIGURATION ────────────────────────────────────────────────
+# ── KONFIGURATION ────────────────────────────────────────────────────────────
 BASE_DIR   = Path(__file__).parent
 ENV_FILE   = BASE_DIR / '.env'
 DB_FILE    = BASE_DIR / 'topics.db'
 LOG_FILE   = Path('/var/log/krankenzusatz/generator.log')
 MODEL      = 'claude-sonnet-4-6'
-MAX_TOKENS = 3000
-# ─────────────────────────────────────────────────────────────────
+MAX_TOKENS = 6000  # erhöht für 1500-2500 Wörter
+
+AUTOR_NAME   = "Klaus Blömecke"
+AUTOR_TITLE  = "Versicherungsexperte, Inhaber Blömecke &amp; Partner"
+AUTOR_BIO    = (
+    "Klaus Blömecke ist zugelassener Versicherungsvermittler (IHK München, "
+    "Nr. D-6ULZ-YVLWB-50) und Inhaber von Blömecke &amp; Partner in Plattling. "
+    "Seit über 20 Jahren berät er GKV-Versicherte in Bayern und deutschlandweit "
+    "zu Kranken-Zusatzversicherungen – persönlich, kostenlos und unverbindlich."
+)
+# ─────────────────────────────────────────────────────────────────────────────
 
 load_dotenv(ENV_FILE)
 
@@ -45,110 +53,123 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-# ── THEMEN-POOL ──────────────────────────────────────────────────
+# ── INTERNE VERLINKUNG ───────────────────────────────────────────────────────
+# Keyword → interne URL die verlinkt werden soll (erste Erwähnung)
+INTERNAL_LINKS = {
+    "Zahnzusatzversicherung":     "https://krankenzusatz-vergleich.de/zahnzusatz/",
+    "Zahnzusatz":                  "https://krankenzusatz-vergleich.de/zahnzusatz/",
+    "Krankenhauszusatzversicherung": "https://krankenzusatz-vergleich.de/krankenhaus/",
+    "Krankenhauszusatz":           "https://krankenzusatz-vergleich.de/krankenhaus/",
+    "DKV":                         "https://krankenzusatz-vergleich.de/dkv/",
+    "Signal Iduna":                "https://krankenzusatz-vergleich.de/signal-iduna/",
+    "Hanse Merkur":                "https://krankenzusatz-vergleich.de/hanse-merkur/",
+    "Krankenzusatzversicherung":   "https://krankenzusatz-vergleich.de/",
+}
+
+# Stadt → Stadtseiten-URL für lokale Erwähnungen
+CITY_LINKS = {
+    "München":      "https://krankenzusatz-vergleich.de/zahnzusatz-muenchen/",
+    "Berlin":       "https://krankenzusatz-vergleich.de/zahnzusatz-berlin/",
+    "Hamburg":      "https://krankenzusatz-vergleich.de/zahnzusatz-hamburg/",
+    "Frankfurt":    "https://krankenzusatz-vergleich.de/zahnzusatz-frankfurt/",
+    "Köln":         "https://krankenzusatz-vergleich.de/zahnzusatz-koeln/",
+    "Stuttgart":    "https://krankenzusatz-vergleich.de/zahnzusatz-stuttgart/",
+    "Düsseldorf":   "https://krankenzusatz-vergleich.de/zahnzusatz-duesseldorf/",
+    "Nürnberg":     "https://krankenzusatz-vergleich.de/zahnzusatz-nuernberg/",
+    "Augsburg":     "https://krankenzusatz-vergleich.de/zahnzusatz-augsburg/",
+    "Regensburg":   "https://krankenzusatz-vergleich.de/zahnzusatz-regensburg/",
+}
+
+# ── THEMEN-POOL (DE) ─────────────────────────────────────────────────────────
 TOPICS = {
     'de': [
         # Zahnzusatzversicherung
-        ("zahnzusatz", "Zahnersatz 2026: Was zahlt die GKV – und was nicht?"),
-        ("zahnzusatz", "Zahnzusatzversicherung ohne Wartezeit: Die besten Tarife im Vergleich"),
-        ("zahnzusatz", "Implantat oder Brücke: Was übernimmt die Zahnzusatzversicherung?"),
-        ("zahnzusatz", "Kieferorthopädie für Erwachsene: Welche Tarife zahlen?"),
-        ("zahnzusatz", "Zahnreinigung versichern: Professionelle Zahnreinigung und Zusatzversicherung"),
-        ("zahnzusatz", "Zahnzusatzversicherung mit Vorerkrankung: So geht's"),
-        ("zahnzusatz", "Zahnzusatzversicherung Vergleich: DKV, Allianz, AXA 2026"),
-        ("zahnzusatz", "Festzuschüsse der GKV erklärt: Lücken clever schließen"),
+        ("zahnzusatz", "Zahnersatz 2026: Was zahlt die GKV – und was bleibt an Ihnen hängen?"),
+        ("zahnzusatz", "Zahnzusatzversicherung ohne Wartezeit: Die besten Tarife 2026 im Vergleich"),
+        ("zahnzusatz", "Implantat oder Brücke: Was leistet die Zahnzusatzversicherung wirklich?"),
+        ("zahnzusatz", "Kieferorthopädie für Erwachsene: Welche Tarife übernehmen die Kosten?"),
+        ("zahnzusatz", "Professionelle Zahnreinigung: Warum die GKV kaum zahlt und Zusatztarife helfen"),
+        ("zahnzusatz", "Zahnzusatzversicherung trotz Vorerkrankung: So finden Sie den richtigen Tarif"),
+        ("zahnzusatz", "DKV, Signal Iduna oder Hanse Merkur: Welche Zahnzusatz passt zu mir?"),
+        ("zahnzusatz", "GKV-Festzuschüsse erklärt: Wie Sie mit einer Zusatzversicherung klug kombinieren"),
+        ("zahnzusatz", "Zahnzusatzversicherung für Kinder: Was Eltern wirklich wissen müssen"),
+        ("zahnzusatz", "Zahnzusatz ab wann sinnvoll? Das richtige Einstiegsalter für maximale Ersparnis"),
+        ("zahnzusatz", "Inlays, Veneers, Keramikzähne: Was zahlt welche Zusatzversicherung?"),
+        ("zahnzusatz", "Bonusheft richtig führen: So steigern Sie Ihren GKV-Zuschuss auf bis zu 65 %"),
         # Krankenhaus
-        ("krankenhaus", "Chefarztbehandlung ohne Zuzahlung: So funktioniert die Krankenhauspolice"),
-        ("krankenhaus", "Einbettzimmer im Krankenhaus: Lohnt sich die Zusatzversicherung?"),
-        ("krankenhaus", "Krankenhaustagegeld: Wie viel brauche ich wirklich?"),
-        ("krankenhaus", "Privatpatient als GKV-Versicherter – geht das?"),
-        ("krankenhaus", "Krankenhaus-Zusatzversicherung für Kinder: Was Eltern wissen müssen"),
-        ("krankenhaus", "Operation mit Wahlleistungen: Kosten und Erstattung im Überblick"),
-        # Auslandsreise
-        ("auslandsreise", "Auslandsreisekrankenversicherung 2026: Was ist wirklich wichtig?"),
-        ("auslandsreise", "Weltweiter Schutz ab 8 Euro im Jahr: Die besten Reisepolicen"),
-        ("auslandsreise", "Rücktransport aus dem Ausland: Wer zahlt, wenn es teuer wird?"),
-        ("auslandsreise", "Reisekrankenversicherung für Senioren über 70"),
-        ("auslandsreise", "Jahrespolice vs. Einzelreise: Was lohnt sich mehr?"),
-        # Heilpraktiker
-        ("heilpraktiker", "Heilpraktiker-Zusatzversicherung: Akupunktur, Osteopathie & Co."),
-        ("heilpraktiker", "Osteopathie-Kosten: GKV zahlt kaum – was die Zusatzversicherung übernimmt"),
-        ("heilpraktiker", "Homöopathie auf Krankenschein: Realität vs. Zusatzversicherung"),
-        ("heilpraktiker", "Naturheilkunde absichern: Die besten Tarife 2026"),
-        # Sehhilfen
-        ("sehhilfen", "Brillenversicherung 2026: Wann lohnt sie sich wirklich?"),
-        ("sehhilfen", "Kontaktlinsen-Versicherung: Kosten und Erstattung"),
-        ("sehhilfen", "Lasik-OP versichern: Augenlaser und Zusatzversicherung"),
-        # Vorsorge
-        ("vorsorge", "Vorsorgeversicherung: Was zahlt die GKV – was die Zusatzversicherung?"),
-        ("vorsorge", "Gesundheitskurse auf Krankenschein: Yoga, Sport und Ernährungsberatung"),
+        ("krankenhaus", "Chefarztbehandlung im Krankenhaus: Wie funktioniert die Zusatzversicherung wirklich?"),
+        ("krankenhaus", "Einbettzimmer im Krankenhaus: Für wen lohnt sich die Zusatzversicherung?"),
+        ("krankenhaus", "Krankenhauszusatz für Selbstständige: Warum schnelle Genesung entscheidend ist"),
+        ("krankenhaus", "Privatpatient als GKV-Versicherter: So geht es mit der richtigen Zusatzpolice"),
+        ("krankenhaus", "Wahlleistungen im Krankenhaus: Kosten, Nutzen und die besten Tarife 2026"),
+        ("krankenhaus", "Krankenhaus-Tagegeld: Wieviel brauche ich wirklich und wann zahlt es sich aus?"),
+        ("krankenhaus", "Rooming-In: Warum Eltern eine Krankenhauszusatz für ihre Kinder brauchen"),
+        ("krankenhaus", "Freie Krankenhauswahl: Warum Spezialisten oft nur über Privatpatienten erreichbar sind"),
         # GKV-Ratgeber
-        ("gkv-ratgeber", "GKV-Leistungen 2026: Was hat sich geändert?"),
-        ("gkv-ratgeber", "Eigenanteil bei Medikamenten senken: Tipps und Zusatzversicherungen"),
-        ("gkv-ratgeber", "GKV-Zusatzversicherung kombinieren: So sparst du am meisten"),
-        ("gkv-ratgeber", "Krankenkassenwechsel 2026: Beste GKV und sinnvolle Zusatzleistungen"),
-        ("gkv-ratgeber", "Bonus-Programme der Krankenkassen: Lohnt es sich wirklich?"),
-    ],
-    'en': [
-        ("expat-guide", "German health insurance explained: GKV, PKV and Zusatzversicherung"),
-        ("expat-guide", "Moving to Germany: Your complete health insurance checklist"),
-        ("expat-guide", "How to get supplemental health insurance in Germany as a foreigner"),
-        ("expat-guide", "Dental costs in Germany 2026: What GKV pays — and what it doesn't"),
-        ("expat-guide", "Germany's public health insurance gaps: What every expat should know"),
-        ("expat-guide", "Private hospital room in Germany: Is it worth the extra cost?"),
-        ("expat-guide", "Travel health insurance for expats living in Germany"),
-        ("expat-guide", "Alternative medicine in Germany: Acupuncture, osteopathy and GKV limits"),
-        ("expat-guide", "Glasses and contact lenses in Germany: Coverage guide for expats"),
-        ("expat-guide", "How to cancel German health insurance when you leave"),
-        ("expat-guide", "English-speaking doctors in Germany: How supplemental insurance helps"),
-        ("expat-guide", "Freelancer health insurance in Germany: GKV vs supplemental plans"),
-        ("expat-guide", "Specialist appointments in Germany: Skip the 6-week wait"),
-        ("expat-guide", "German dental implants: Cost, GKV coverage and supplemental plans"),
-        ("expat-guide", "Health insurance for families in Germany: What expat parents need to know"),
+        ("gkv-ratgeber", "GKV-Leistungen 2026: Was hat sich verändert und wo sind die größten Lücken?"),
+        ("gkv-ratgeber", "Eigenanteil bei Medikamenten: Tipps um die Zuzahlung zu senken"),
+        ("gkv-ratgeber", "Krankenkasse wechseln 2026: Wann es sich lohnt und worauf Sie achten müssen"),
+        ("gkv-ratgeber", "GKV-Zusatzleistungen: Was Ihre Krankenkasse extra bietet – und was nicht"),
+        ("gkv-ratgeber", "Zusatzversicherung kombinieren: So maximieren Sie Schutz bei minimalem Beitrag"),
+        ("gkv-ratgeber", "Bonus-Programme der Krankenkassen: Wirklicher Mehrwert oder Marketing-Gag?"),
+        # Heilpraktiker
+        ("heilpraktiker", "Heilpraktiker-Zusatzversicherung 2026: Akupunktur, Osteopathie und mehr"),
+        ("heilpraktiker", "Osteopathie-Kosten: Was die GKV zahlt – und warum eine Zusatzversicherung sinnvoll ist"),
+        ("heilpraktiker", "Naturheilkunde richtig absichern: Die besten Heilpraktiker-Tarife im Überblick"),
+        # Vorsorge & Sehhilfen
+        ("vorsorge", "Vorsorgeuntersuchungen: Was die GKV zahlt und wo Zusatztarife sinnvoll sind"),
+        ("sehhilfen", "Brillenversicherung 2026: Wann lohnt sie sich – und wann nicht?"),
+        # Ratgeber Abschluss
+        ("gkv-ratgeber", "Versicherungsantrag ausfüllen: Gesundheitsfragen richtig beantworten"),
+        ("gkv-ratgeber", "Kündigung und Wechsel: So wechseln Sie Ihre Zusatzversicherung ohne Lücken"),
+        ("gkv-ratgeber", "Zusatzversicherung im Alter: Wann ist es noch sinnvoll abzuschließen?"),
     ],
 }
 
-SYSTEM_PROMPT_DE = """Du bist ein erfahrener Redakteur für ein unabhängiges deutsches Versicherungsvergleichsportal.
-Schreibe sachliche, nützliche Ratgeber-Artikel über Krankenzusatzversicherungen.
+# ── SYSTEM-PROMPT ────────────────────────────────────────────────────────────
+SYSTEM_PROMPT_DE = f"""Du bist Klaus Blömecke, erfahrener Versicherungsexperte und Inhaber von Blömecke & Partner in Plattling, Bayern. Du schreibst Ratgeber-Artikel für den Blog krankenzusatz-vergleich.de.
 
-Regeln:
-- Länge: 900–1200 Wörter
-- Ton: sachlich, vertrauenswürdig, leserfreundlich – kein Werbesprech
-- Format: semantisches HTML (h2, h3, p, ul, strong) – KEIN Markdown
-- Interne Verlinkung: Erste Erwähnung von "Krankenzusatzversicherung" mit
-  <a href="https://krankenzusatz-vergleich.de/">Krankenzusatzversicherung</a> verlinken
-- Am Ende: KEIN CTA-Block (wird automatisch vom Theme angehängt)
-- Zahlen und Preise: aktuelle Beispielwerte 2026 verwenden
-- Keine Finanzberatung: immer auf individuelle Beratung hinweisen
-- Kein Duplicate Content: jeder Artikel muss einzigartigen Mehrwert liefern
-- SEO: H1-Titel wird vom WordPress-Theme gesetzt, beginne mit H2
+WICHTIGE REGELN:
 
-Ausgabe: Nur HTML-Inhalt ohne <html>, <head>, <body> Tags."""
+Länge & Qualität:
+- Mindestens 1.500 Wörter, idealerweise 1.800–2.200 Wörter
+- Kein generischer Fülltext – jeder Abschnitt muss echten Mehrwert bieten
+- Konkrete Zahlen, Beispiele und Vergleiche einbauen
+- Wo sinnvoll: eine Tabelle mit Vergleich (HTML <table>)
 
-SYSTEM_PROMPT_EN = """You are an experienced editor for an independent German insurance comparison portal,
-writing for expats and internationals living in Germany.
+Ton & Stil:
+- Sachlich, vertrauenswürdig, auf Augenhöhe mit dem Leser
+- Kein Werbesprech, keine übertriebenen Versprechen
+- Persönliche Formulierungen erlaubt: "In meiner Beratungspraxis erlebe ich häufig..."
 
-Rules:
-- Length: 900–1200 words
-- Tone: clear, factual, helpful — no jargon, no sales language
-- Format: semantic HTML (h2, h3, p, ul, strong) — NO Markdown
-- Internal link: First mention of "supplemental health insurance" with
-  <a href="https://krankenzusatz-vergleich.de/en/">supplemental health insurance</a>
-- No CTA block at the end (added automatically by the theme)
-- Numbers: use 2026 figures where relevant
-- Disclaimer: remind readers this is general information, not financial advice
-- Start with H2, not H1 (title is set by WordPress theme)
+Format (semantisches HTML, KEIN Markdown):
+- Nur h2 und h3 (kein h1 – wird vom WordPress-Theme gesetzt)
+- p, ul, ol, li, strong, em, table, thead, tbody, tr, th, td
+- Abschnittsstruktur: Einleitung → Hauptteil (3–5 Abschnitte) → Fazit
 
-Output: HTML content only, no <html>, <head>, <body> tags."""
+Interne Verlinkung (PFLICHT – genau einmal pro Keyword):
+- Erste Erwähnung "Zahnzusatzversicherung" → <a href="https://krankenzusatz-vergleich.de/zahnzusatz/">Zahnzusatzversicherung</a>
+- Erste Erwähnung "Krankenhauszusatz" → <a href="https://krankenzusatz-vergleich.de/krankenhaus/">Krankenhauszusatz</a>
+- Erste Erwähnung "DKV" → <a href="https://krankenzusatz-vergleich.de/dkv/">DKV</a>
+- Erste Erwähnung "Signal Iduna" → <a href="https://krankenzusatz-vergleich.de/signal-iduna/">Signal Iduna</a>
+- Erste Erwähnung "Hanse Merkur" → <a href="https://krankenzusatz-vergleich.de/hanse-merkur/">Hanse Merkur</a>
+- Erste Erwähnung "Krankenzusatzversicherung" (allgemein) → <a href="https://krankenzusatz-vergleich.de/">Krankenzusatzversicherung</a>
 
-# ── DATENBANK ────────────────────────────────────────────────────
+Versicherer: Nur DKV, Signal Iduna und Hanse Merkur nennen – keine anderen.
+
+Haftungshinweis: Am Ende jedes Artikels EINEN Satz einfügen:
+<p><em>Hinweis: Dieser Artikel dient der allgemeinen Information und ersetzt keine individuelle Versicherungsberatung.</em></p>
+
+Ausgabe: Nur HTML-Artikelinhalt ohne <html>, <head>, <body> Tags. Beginne direkt mit dem ersten <h2>."""
+
+# ── DATENBANK ────────────────────────────────────────────────────────────────
 def init_db() -> sqlite3.Connection:
     conn = sqlite3.connect(DB_FILE)
     conn.execute("""
         CREATE TABLE IF NOT EXISTS published (
-            id        INTEGER PRIMARY KEY AUTOINCREMENT,
-            topic     TEXT NOT NULL,
-            lang      TEXT NOT NULL,
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            topic        TEXT NOT NULL,
+            lang         TEXT NOT NULL,
             published_at TEXT NOT NULL,
             wp_post_id   INTEGER,
             UNIQUE(topic, lang)
@@ -159,7 +180,6 @@ def init_db() -> sqlite3.Connection:
 
 
 def pick_topic(conn: sqlite3.Connection, lang: str) -> tuple[str, str]:
-    """Wählt ein noch nicht veröffentlichtes Thema aus."""
     published = {
         row[0]
         for row in conn.execute("SELECT topic FROM published WHERE lang = ?", (lang,))
@@ -168,7 +188,7 @@ def pick_topic(conn: sqlite3.Connection, lang: str) -> tuple[str, str]:
     available = [(cat, t) for cat, t in pool if t not in published]
 
     if not available:
-        log.warning("Alle Themen für '%s' bereits veröffentlicht – Topic-Pool zurücksetzen", lang)
+        log.warning("Alle Themen für '%s' veröffentlicht – Pool zurücksetzen", lang)
         conn.execute("DELETE FROM published WHERE lang = ?", (lang,))
         conn.commit()
         available = pool
@@ -183,90 +203,103 @@ def mark_published(conn: sqlite3.Connection, topic: str, lang: str, wp_post_id: 
     )
     conn.commit()
 
-# ── ARTIKEL GENERIEREN ───────────────────────────────────────────
+
+# ── ARTIKEL GENERIEREN ───────────────────────────────────────────────────────
 def generate_article(category: str, title: str, lang: str) -> str:
     client = anthropic.Anthropic(api_key=os.environ['ANTHROPIC_API_KEY'])
 
-    system = SYSTEM_PROMPT_DE if lang == 'de' else SYSTEM_PROMPT_EN
-
     user_prompt = (
-        f'Schreibe einen ausführlichen Ratgeber-Artikel mit dem Titel:\n"{title}"\n\n'
-        f'Kategorie: {category}\n'
+        f'Schreibe einen ausführlichen, hochwertigen Ratgeber-Artikel mit dem Titel:\n'
+        f'"{title}"\n\n'
+        f'Kategorie: {category}\n\n'
+        f'Anforderungen:\n'
+        f'- Mindestens 1.500 Wörter echten Inhalt\n'
+        f'- Mindestens 3 aussagekräftige H2-Abschnitte\n'
+        f'- Eine Vergleichstabelle (wenn zum Thema passend)\n'
+        f'- Konkrete Zahlen und Beispiele (Preise, Prozentsätze, Szenarien)\n'
+        f'- Alle internen Links wie in den Regeln beschrieben einbauen\n\n'
         f'Liefere nur den HTML-Artikelinhalt (ab H2), ohne Einleitung oder Erklärungen.'
-        if lang == 'de' else
-        f'Write a detailed guide article with the title:\n"{title}"\n\n'
-        f'Category: {category}\n'
-        f'Return only the HTML article content (starting with H2), no preamble.'
     )
 
-    log.info("Generiere Artikel: '%s' [%s]", title, lang.upper())
+    log.info("Generiere Artikel: '%s'", title)
 
     message = client.messages.create(
         model=MODEL,
         max_tokens=MAX_TOKENS,
-        system=system,
+        system=SYSTEM_PROMPT_DE,
         messages=[{'role': 'user', 'content': user_prompt}],
     )
 
     content = message.content[0].text.strip()
-    log.info("Artikel generiert: %d Zeichen | Tokens: %s",
+    log.info("Generiert: %d Zeichen | %d Output-Tokens",
              len(content), message.usage.output_tokens)
     return content
 
 
+def append_author_box(content: str) -> str:
+    """Hängt einen Autoren-Block ans Ende des Artikels."""
+    author_html = f"""
+<div class="author-box" style="margin-top:2em;padding:1.2em 1.4em;background:#f0f4ff;border-left:4px solid #0057ff;border-radius:8px;">
+  <p style="margin:0 0 4px;font-size:.85em;color:#8898aa;text-transform:uppercase;letter-spacing:.05em;">Über den Autor</p>
+  <p style="margin:0 0 6px;font-weight:700;color:#0a1628;font-size:1em;">{AUTOR_NAME} · <span style="font-weight:400;color:#4a5568;font-size:.92em;">{AUTOR_TITLE}</span></p>
+  <p style="margin:0;font-size:.9em;color:#4a5568;line-height:1.6;">{AUTOR_BIO}</p>
+</div>"""
+    return content + author_html
+
+
 def build_meta(title: str, content: str, lang: str) -> dict:
-    """Erstellt SEO-Meta-Daten für den Artikel."""
-    # Einfache Slug-Generierung
     slug = title.lower()
-    for ch in ' äöüß!?:,.()/–—"\'':
-        slug = slug.replace(ch, '-' if ch == ' ' else '')
-    slug = slug.replace('ä', 'ae').replace('ö', 'oe').replace('ü', 'ue').replace('ß', 'ss')
+    replacements = {
+        'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'ß': 'ss',
+        ' ': '-', '?': '', '!': '', ':': '', ',': '',
+        '.': '', '(': '', ')': '', '/': '-', '–': '-', '—': '-', '"': '', "'": '',
+    }
+    for ch, rep in replacements.items():
+        slug = slug.replace(ch, rep)
     slug = '-'.join(filter(None, slug.split('-')))[:80]
 
-    word_count = len(content.split())
-    excerpt = ' '.join(content.replace('<', ' <').split()[:35])
-    # Tags aus Titel ableiten
-    keyword_map = {
-        'de': ['Krankenzusatzversicherung', 'Versicherungsvergleich', 'GKV', 'Tarife 2026'],
-        'en': ['supplemental health insurance Germany', 'expat insurance Germany', 'GKV', '2026'],
-    }
-    tags = keyword_map[lang][:]
+    # Excerpt: ersten sauberen Satz extrahieren
+    import re
+    text_only = re.sub(r'<[^>]+>', ' ', content)
+    words = text_only.split()
+    excerpt = ' '.join(words[:40]) + '…'
+
+    word_count = len(text_only.split())
+
+    tags = ['Krankenzusatzversicherung', 'Versicherungsvergleich', 'GKV', 'Tarife 2026']
     for word in title.split():
         if len(word) > 6 and word not in tags:
             tags.append(word)
 
     return {
-        'slug':      slug,
-        'excerpt':   excerpt,
-        'tags':      tags[:8],
+        'slug':       slug,
+        'excerpt':    excerpt,
+        'tags':       tags[:8],
         'word_count': word_count,
     }
 
-# ── MAIN ─────────────────────────────────────────────────────────
+
+# ── MAIN ─────────────────────────────────────────────────────────────────────
 def main():
-    parser = argparse.ArgumentParser(description='Artikel-Generator für krankenzusatz-vergleich.de')
-    parser.add_argument('--lang', choices=['de', 'en'], required=True,
-                        help='Artikelsprache: de oder en')
+    parser = argparse.ArgumentParser(description='Artikel-Generator krankenzusatz-vergleich.de')
+    parser.add_argument('--lang', choices=['de', 'en'], default='de',
+                        help='Artikelsprache (Standard: de)')
     parser.add_argument('--dry-run', action='store_true',
-                        help='Artikel generieren aber NICHT veröffentlichen')
+                        help='Nur generieren, nicht veröffentlichen')
     parser.add_argument('--topic', type=str, default=None,
-                        help='Bestimmtes Thema erzwingen (exakter Titeltext)')
+                        help='Bestimmtes Thema erzwingen (Titeltext)')
     args = parser.parse_args()
 
-    # Env-Validierung
     required_vars = ['ANTHROPIC_API_KEY', 'WP_URL', 'WP_USER', 'WP_APP_PASSWORD']
     missing = [v for v in required_vars if not os.environ.get(v)]
     if missing:
-        log.error("Fehlende Umgebungsvariablen: %s", ', '.join(missing))
-        log.error("Bitte /var/www/scripts/.env ausfüllen")
+        log.error("Fehlende .env-Variablen: %s", ', '.join(missing))
         sys.exit(1)
 
     conn = init_db()
 
-    # Thema wählen
     if args.topic:
-        # Manuell angegebenes Thema suchen
-        pool = TOPICS[args.lang]
+        pool = TOPICS.get(args.lang, [])
         match = [(c, t) for c, t in pool if args.topic.lower() in t.lower()]
         if not match:
             log.error("Thema nicht gefunden: %s", args.topic)
@@ -275,32 +308,33 @@ def main():
     else:
         category, title = pick_topic(conn, args.lang)
 
-    log.info("── Starte Artikel-Generator ──────────────────────")
-    log.info("Sprache:   %s", args.lang.upper())
+    log.info("── Artikel-Generator gestartet ────────────────────")
+    log.info("Sprache:   DE")
     log.info("Kategorie: %s", category)
     log.info("Titel:     %s", title)
 
-    # Artikel generieren
     try:
         content = generate_article(category, title, args.lang)
     except anthropic.APIError as e:
         log.error("Claude API Fehler: %s", e)
         sys.exit(1)
 
-    meta = build_meta(title, content, args.lang)
+    content = append_author_box(content)
+    meta    = build_meta(title, content, args.lang)
+
+    log.info("Wörter: ~%d", meta['word_count'])
 
     if args.dry_run:
-        log.info("DRY-RUN: Artikel nicht veröffentlicht")
+        log.info("DRY-RUN – nicht veröffentlicht")
         print(f"\n{'='*60}")
-        print(f"Titel: {title}")
-        print(f"Slug:  {meta['slug']}")
+        print(f"Titel:  {title}")
+        print(f"Slug:   {meta['slug']}")
         print(f"Wörter: {meta['word_count']}")
-        print(f"Tags:  {', '.join(meta['tags'])}")
+        print(f"Tags:   {', '.join(meta['tags'])}")
         print(f"{'='*60}\n")
-        print(content[:500] + '...')
+        print(content[:800] + '\n...')
         return
 
-    # In WordPress veröffentlichen
     try:
         wp_post_id = publish_to_wordpress(
             title=title,
@@ -313,12 +347,11 @@ def main():
         )
         mark_published(conn, title, args.lang, wp_post_id)
         log.info("✓ Veröffentlicht: WP Post ID %d", wp_post_id)
-        log.info("  URL: %s/%s/%s", os.environ['WP_URL'], category, meta['slug'])
     except Exception as e:
         log.error("WordPress-Fehler: %s", e)
         sys.exit(1)
 
-    log.info("── Artikel-Generator fertig ───────────────────────")
+    log.info("── Fertig ─────────────────────────────────────────")
 
 
 if __name__ == '__main__':
