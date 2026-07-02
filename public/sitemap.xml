@@ -238,6 +238,38 @@
     <priority>0.75</priority>
   </url>
 
+  <!-- Stadtseiten Krankenhauszusatz -->
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-muenchen/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-berlin/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-hamburg/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-frankfurt/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-koeln/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-stuttgart/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-duesseldorf/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-nuernberg/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-leipzig/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-dortmund/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-hannover/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-bremen/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-dresden/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-mannheim/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-karlsruhe/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-augsburg/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-wiesbaden/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-muenster/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-bonn/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-bielefeld/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-essen/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-freiburg/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-kiel/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-regensburg/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-aachen/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-bochum/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-passau/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-ingolstadt/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-wuerzburg/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://krankenzusatz-vergleich.de/krankenhaus-mainz/</loc><lastmod>2026-07-02</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+
   <!-- Rechtliches -->
   <url>
     <loc>https://krankenzusatz-vergleich.de/erstinformation/</loc>

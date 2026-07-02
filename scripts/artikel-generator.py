@@ -16,7 +16,7 @@ import sys
 import json
 import random
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import anthropic
@@ -199,7 +199,7 @@ def pick_topic(conn: sqlite3.Connection, lang: str) -> tuple[str, str]:
 def mark_published(conn: sqlite3.Connection, topic: str, lang: str, wp_post_id: int | None):
     conn.execute(
         "INSERT OR REPLACE INTO published (topic, lang, published_at, wp_post_id) VALUES (?, ?, ?, ?)",
-        (topic, lang, datetime.utcnow().isoformat(), wp_post_id),
+        (topic, lang, datetime.now(timezone.utc).isoformat(), wp_post_id),
     )
     conn.commit()
 
