@@ -4,7 +4,7 @@
   <meta charset="<?php bloginfo('charset'); ?>">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <?php wp_head(); ?>
-<script src="/analytics.js" defer data-ga="G-XXXXXXXXXX" data-umami="2a962e6a-2b9d-4850-951d-2b23afafef3c" data-umami-src="https://stats.pilsner-vertrieb.de/script.js" data-privacy="/datenschutz/" data-accent="#0057ff"></script>
+<script src="/analytics.js" defer data-ga="G-YF04R8EP23" data-umami="2a962e6a-2b9d-4850-951d-2b23afafef3c" data-umami-src="https://stats.pilsner-vertrieb.de/script.js" data-privacy="/datenschutz/" data-accent="#0057ff"></script>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
