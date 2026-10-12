@@ -152,6 +152,7 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
     footer a:hover{{color:#fff;}}
     @media(max-width:600px){{.form-row{{grid-template-columns:1fr;}}.hero-stats{{gap:16px;}}.compare-table{{font-size:.78rem;}}.compare-table th,.compare-table td{{padding:9px 8px;}}}}
   </style>
+<script src="/analytics.js" defer data-ga="G-YF04R8EP23" data-umami="2a962e6a-2b9d-4850-951d-2b23afafef3c" data-umami-src="https://stats.pilsner-vertrieb.de/script.js" data-privacy="/datenschutz/" data-accent="#0057ff"></script>
 </head>
 <body>
 
