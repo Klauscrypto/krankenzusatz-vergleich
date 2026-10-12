@@ -32,7 +32,7 @@
       </span>
       <div class="footer-legal">
         <a href="<?php echo get_permalink(get_page_by_path('impressum')); ?>">Impressum</a>
-        <a href="<?php echo get_permalink(get_page_by_path('datenschutz')); ?>">Datenschutz</a>
+        <a href="<?php echo get_permalink(get_page_by_path('datenschutz')); ?>">Datenschutz</a> <a href="#" data-consent-open>Cookie-Einstellungen</a>
       </div>
     </div>
   </div>
