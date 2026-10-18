@@ -30,10 +30,10 @@ CITIES = [
     ("Essen",       "essen",       "Nordrhein-Westfalen","580.000",   "ca. 20 Kliniken", "Essen hat mit dem Universitätsklinikum Essen und dem Westdeutschen Tumorzentrum exzellente Spezialmedizin – als Privatpatient direkt zugänglich.", "Im Ruhrgebiet ist die GKV-Lücke bei stationärer Versorgung besonders groß – Chefarztbehandlung bleibt Privaten vorbehalten."),
     ("Freiburg",    "freiburg",    "Baden-Württemberg",  "230.000",   "ca. 10 Kliniken", "Freiburg hat mit der Uniklinik Freiburg eine der bekanntesten Kliniken Deutschlands – besonders in der Tumormedizin und Neurologie.", "Freiburger schätzen die hohe Lebensqualität – eine Krankenhauszusatz passt perfekt in diesen Anspruch."),
     ("Kiel",        "kiel",        "Schleswig-Holstein", "245.000",   "ca. 10 Kliniken", "Kiel hat mit dem UKSH (Universitätsklinikum Schleswig-Holstein) ein Hochleistungszentrum der Norddeutschen Medizin.", "Norddeutsche sind gut organisiert – Krankenhauszusatztarife von Signal Iduna und DKV sind hier besonders beliebt."),
-    ("Regensburg",  "regensburg",  "Bayern",             "160.000",   "ca. 8 Kliniken",  "Regensburg hat mit dem Universitätsklinikum Regensburg eine führende Klinik für Ostbayern – und liegt nah an unserem Standort in Plattling.", "Als Nachbarregion zu Plattling bieten wir Regensburger Kunden auch persönliche Beratungstermine vor Ort an."),
+    ("Regensburg",  "regensburg",  "Bayern",             "160.000",   "ca. 8 Kliniken",  "Regensburg hat mit dem Universitätsklinikum Regensburg eine führende Klinik für Ostbayern – und liegt nah an unserem Standort in Auerbach.", "Als Nachbarregion zu Auerbach bieten wir Regensburger Kunden auch persönliche Beratungstermine vor Ort an."),
     ("Aachen",      "aachen",      "Nordrhein-Westfalen","240.000",   "ca. 10 Kliniken", "Aachen hat mit dem Uniklinikum RWTH Aachen ein Forschungs- und Behandlungszentrum von internationalem Rang.", "Im Dreiländereck Aachen suchen viele Grenzpendler nach Krankenhauszusatz mit europäischem Geltungsbereich."),
     ("Bochum",      "bochum",      "Nordrhein-Westfalen","365.000",   "ca. 14 Kliniken", "Bochum hat mit der Ruhr-Universität und dem Knappschaftskrankenhaus Bochum starke medizinische Einrichtungen.", "Bochumer Patienten wählen mit Krankenhauszusatz selbst, welcher Chefarzt sie operiert – statt zufällig zugeteilt zu werden."),
-    ("Passau",      "passau",      "Bayern",             "55.000",    "ca. 4 Kliniken",  "Passau hat das Klinikum Passau als regionales Versorgungszentrum – und liegt nur wenige Kilometer von unserem Büro in Plattling entfernt.", "Als regionaler Partner können wir Passauer Kunden auch persönlich beraten – kurze Wege, schnelle Entscheidung."),
+    ("Passau",      "passau",      "Bayern",             "55.000",    "ca. 4 Kliniken",  "Passau hat das Klinikum Passau als regionales Versorgungszentrum – und liegt nur wenige Kilometer von unserem Büro in Auerbach entfernt.", "Als regionaler Partner können wir Passauer Kunden auch persönlich beraten – kurze Wege, schnelle Entscheidung."),
     ("Ingolstadt",  "ingolstadt",  "Bayern",             "140.000",   "ca. 6 Kliniken",  "Ingolstadt hat mit dem Klinikum Ingolstadt ein modernes Haus der Maximalversorgung – als Privatpatient auf Chefarztebene.", "Ingolstädter Audi-Mitarbeiter und gut verdienende Fachkräfte schließen überdurchschnittlich oft Krankenhauszusatztarife ab."),
     ("Würzburg",    "wuerzburg",   "Bayern",             "130.000",   "ca. 8 Kliniken",  "Würzburg hat mit dem Uniklinikum Würzburg eine der ältesten und renommiertesten Kliniken Deutschlands.", "Würzburger Uniklinikum-Mitarbeiter selbst schließen besonders häufig Krankenhauszusatztarife ab – sie kennen den Unterschied."),
     ("Mainz",       "mainz",       "Rheinland-Pfalz",    "220.000",   "ca. 10 Kliniken", "Mainz hat mit der Uniklinik Mainz und dem Gemeinschaftsklinikum Mittelrhein starke Kliniken im Rhein-Main-Gebiet.", "Mainzer genießen als Privatpatienten direkten Zugang zur Uniklinik Mainz – ohne Wartezeit und mit Chefarzt der Wahl."),
@@ -59,7 +59,7 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
         "@id": "https://krankenzusatz-vergleich.de/#org",
         "name": "Blömecke & Partner",
         "telephone": "+49-9931-9819500",
-        "address": {{"@type":"PostalAddress","streetAddress":"Flurweg 31","addressLocality":"Plattling","postalCode":"94447","addressCountry":"DE"}},
+        "address": {{"@type":"PostalAddress","streetAddress":"Siedlungsweg 6","addressLocality":"Auerbach","postalCode":"94530","addressCountry":"DE"}},
         "areaServed": {{"@type":"City","name":"{name}","addressCountry":"DE"}}
       }},
       {{
@@ -354,7 +354,7 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
 </section>
 
 <footer>
-  <p>&copy; 2026 krankenzusatz-vergleich.de – Blömecke &amp; Partner · Flurweg 31 · 94447 Plattling · <a href="tel:+4999319819500">09931 – 981 9500</a></p>
+  <p>&copy; 2026 krankenzusatz-vergleich.de – Blömecke &amp; Partner · Siedlungsweg 6 · 94530 Auerbach · <a href="tel:+4999319819500">09931 – 981 9500</a></p>
   <p style="margin-top:8px;">
     <a href="/">Startseite</a> &nbsp;·&nbsp;
     <a href="/zahnzusatz/">Zahnzusatz</a> &nbsp;·&nbsp;

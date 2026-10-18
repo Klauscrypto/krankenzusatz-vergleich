@@ -30,10 +30,10 @@ CITIES = [
     ("Essen",       "essen",       "Nordrhein-Westfalen","580.000",   "ca. 355.000", "Essen ist Kulturhauptstadt des Ruhrgebiets 2010 und wandelt sich vom Industriestandort zur Dienstleistungsmetropole.", "Im Essener Norden ist die GKV-Lücke bei Zahnersatz besonders groß."),
     ("Freiburg",    "freiburg",    "Baden-Württemberg",  "230.000",   "ca. 141.000", "Freiburg ist Universitätsstadt, Solarhaupt­stadt und Eingangstor zum Schwarzwald – mit wachsender Wirtschaft.", "Freiburgs junge Bevölkerung und hohe Lebensqualität machen die Stadt zum attraktiven Markt für Zusatzschutz."),
     ("Kiel",        "kiel",        "Schleswig-Holstein", "245.000",   "ca. 150.000", "Kiel als Landeshauptstadt Schleswig-Holsteins ist Marine- und Universitätsstandort mit starker Dienstleistungsbranche.", "Norddeutsche sind traditionell günstig eingestellt – günstige Einstiegstarife passen perfekt."),
-    ("Regensburg",  "regensburg",  "Bayern",             "160.000",   "ca. 98.000", "Regensburg als UNESCO-Welterbestadt ist der am schnellsten wachsende Wirtschaftsstandort Bayerns.", "Als Nachbarregion zu unserem Standort in Plattling bieten wir in Regensburg auch persönliche Beratungstermine an."),
+    ("Regensburg",  "regensburg",  "Bayern",             "160.000",   "ca. 98.000", "Regensburg als UNESCO-Welterbestadt ist der am schnellsten wachsende Wirtschaftsstandort Bayerns.", "Als Nachbarregion zu unserem Standort in Auerbach bieten wir in Regensburg auch persönliche Beratungstermine an."),
     ("Aachen",      "aachen",      "Nordrhein-Westfalen","240.000",   "ca. 147.000", "Aachen als Dreiländereck (DE/NL/BE) und RWTH-Universitätsstandort ist eines der größten Technologie-Cluster Europas.", "Im Grenzgebiet wohnen viele Berufspendler – guter Zahnzusatzschutz ist hier besonders relevant."),
     ("Bochum",      "bochum",      "Nordrhein-Westfalen","365.000",   "ca. 224.000", "Bochum wandelt sich vom Stahlstandort zur Uni- und Tech-City mit wachsender Start-up-Szene.", "Bochumer suchen verstärkt nach günstigen Zahnzusatztarifen – Signal Iduna und Hanse Merkur sind hier besonders gefragt."),
-    ("Passau",      "passau",      "Bayern",             "55.000",    "ca. 33.000", "Passau als Dreiflüssestadt liegt nur wenige Kilometer von unserem Büro in Plattling entfernt.", "Als regionaler Anbieter kennen wir den Markt in Passau sehr gut – persönliche Beratung auf Wunsch auch vor Ort."),
+    ("Passau",      "passau",      "Bayern",             "55.000",    "ca. 33.000", "Passau als Dreiflüssestadt liegt nur wenige Kilometer von unserem Büro in Auerbach entfernt.", "Als regionaler Anbieter kennen wir den Markt in Passau sehr gut – persönliche Beratung auf Wunsch auch vor Ort."),
     ("Ingolstadt",  "ingolstadt",  "Bayern",             "140.000",   "ca. 86.000", "Ingolstadt ist Audi-Sitz und einer der wirtschaftsstärksten Standorte Deutschlands mit überdurchschnittlichen Einkommen.", "Ingolstädter Fachkräfte sind gut verdienend – Premium-Zahnzusatz­tarife wie DKV ZahnPremium sind hier besonders gefragt."),
     ("Würzburg",    "wuerzburg",   "Bayern",             "130.000",   "ca. 80.000", "Würzburg als unterfränkische Universitäts- und Weinstadt hat eine starke Medizin- und Pharmabranche.", "Würzburger Universitätsklinikum-Mitarbeiter sind eine wichtige Zielgruppe für Krankenhaus-Zusatztarife."),
     ("Mainz",       "mainz",       "Rheinland-Pfalz",    "220.000",   "ca. 135.000", "Mainz als Landeshauptstadt und ZDF-Standort ist wirtschaftlich stark und liegt im pulsierenden Rhein-Main-Gebiet.", "Im Großraum Mainz/Wiesbaden/Frankfurt besteht eine der höchsten Kaufkraftdichten Deutschlands."),
@@ -59,7 +59,7 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
         "@id": "https://krankenzusatz-vergleich.de/#org",
         "name": "Blömecke & Partner",
         "telephone": "+49-9931-9819500",
-        "address": {{"@type":"PostalAddress","streetAddress":"Flurweg 31","addressLocality":"Plattling","postalCode":"94447","addressCountry":"DE"}},
+        "address": {{"@type":"PostalAddress","streetAddress":"Siedlungsweg 6","addressLocality":"Auerbach","postalCode":"94530","addressCountry":"DE"}},
         "areaServed": {{"@type":"City","name":"{name}","addressCountry":"DE"}}
       }},
       {{
@@ -329,7 +329,7 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
 </section>
 
 <footer>
-  <p>&copy; 2026 krankenzusatz-vergleich.de – Blömecke &amp; Partner · Flurweg 31 · 94447 Plattling · <a href="tel:+4999319819500">09931 – 981 9500</a></p>
+  <p>&copy; 2026 krankenzusatz-vergleich.de – Blömecke &amp; Partner · Siedlungsweg 6 · 94530 Auerbach · <a href="tel:+4999319819500">09931 – 981 9500</a></p>
   <p style="margin-top:8px;">
     <a href="/">Startseite</a> &nbsp;·&nbsp;
     <a href="/zahnzusatz/">Zahnzusatz</a> &nbsp;·&nbsp;
