@@ -31,7 +31,7 @@ if (!$vorname || !$nachname || !filter_var($email, FILTER_VALIDATE_EMAIL) || $al
     exit;
 }
 
-$to      = 'finanzierung@bloemecke-partner.de';
+$to      = 'a.bloemecke@bloemecke-partner.de';
 $subject = "Neue Beratungsanfrage: $interesse";
 
 $body  = "Neue Anfrage über krankenzusatz-vergleich.de\n";
