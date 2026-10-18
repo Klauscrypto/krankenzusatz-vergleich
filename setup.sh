@@ -396,6 +396,14 @@ server {
         try_files \$uri \$uri/ =404;
     }
 
+    # ── Lead-Formular (PHP), Mailer-Klasse nicht ausliefern ──
+    location = /lead.php {
+        fastcgi_pass  unix:/run/php/php${PHP_VER}-fpm.sock;
+        include       fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME \${document_root}\$fastcgi_script_name;
+    }
+    location = /smtp_mailer.php { return 404; }
+
     # ── Englische Expat-Version ───────────────────────────────
     location /en/ {
         try_files \$uri \$uri/index.html =404;

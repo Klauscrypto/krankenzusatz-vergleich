@@ -1,4 +1,9 @@
 <?php
+// Lead-Formular: Versand per SMTP über das All-Inkl-Postfach (PHP mail() ist auf dem Server nicht für
+// diese Domain eingerichtet). Zugangsdaten außerhalb des Webroots: /etc/krankenzusatz-vergleich/smtp.env
+// (SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, optional LEAD_TO für Tests).
+require __DIR__ . '/smtp_mailer.php';
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: https://krankenzusatz-vergleich.de');
 header('Access-Control-Allow-Methods: POST');
@@ -18,12 +23,15 @@ if (!$data) {
     exit;
 }
 
-$vorname   = htmlspecialchars(trim($data['vorname']   ?? ''));
-$nachname  = htmlspecialchars(trim($data['nachname']  ?? ''));
-$email     = filter_var(trim($data['email'] ?? ''), FILTER_SANITIZE_EMAIL);
-$telefon   = htmlspecialchars(trim($data['telefon']   ?? ''));
+// Header-Injection verhindern (Werte landen teils im Betreff)
+$line = fn($v) => str_replace(["\r", "\n"], ' ', trim((string) $v));
+
+$vorname   = htmlspecialchars($line($data['vorname']   ?? ''));
+$nachname  = htmlspecialchars($line($data['nachname']  ?? ''));
+$email     = filter_var($line($data['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+$telefon   = htmlspecialchars($line($data['telefon']   ?? ''));
 $alter     = intval($data['alter'] ?? 0);
-$interesse = htmlspecialchars(trim($data['interesse'] ?? ''));
+$interesse = htmlspecialchars($line($data['interesse'] ?? ''));
 
 if (!$vorname || !$nachname || !filter_var($email, FILTER_VALIDATE_EMAIL) || $alter < 18) {
     http_response_code(422);
@@ -31,7 +39,15 @@ if (!$vorname || !$nachname || !filter_var($email, FILTER_VALIDATE_EMAIL) || $al
     exit;
 }
 
-$to      = 'a.bloemecke@bloemecke-partner.de';
+$envPath = '/etc/krankenzusatz-vergleich/smtp.env';
+$env = is_readable($envPath) ? parse_ini_file($envPath) : false;
+if (!$env || empty($env['SMTP_PASS'])) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Mail nicht konfiguriert']);
+    exit;
+}
+
+$to      = !empty($env['LEAD_TO']) ? $env['LEAD_TO'] : 'a.bloemecke@bloemecke-partner.de';
 $subject = "Neue Beratungsanfrage: $interesse";
 
 $body  = "Neue Anfrage über krankenzusatz-vergleich.de\n";
@@ -43,16 +59,19 @@ $body .= "Telefon:   $telefon\n";
 $body .= "Interesse: $interesse\n";
 $body .= "\nEingegangen: " . date('d.m.Y H:i') . " Uhr\n";
 
-$headers  = "From: noreply@krankenzusatz-vergleich.de\r\n";
-$headers .= "Reply-To: $email\r\n";
-$headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
-$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-
-$sent = mail($to, $subject, $body, $headers);
-
-if ($sent) {
+try {
+    $mailer = new SmtpMailer($env['SMTP_HOST'], (int) ($env['SMTP_PORT'] ?? 587), $env['SMTP_USER'], $env['SMTP_PASS']);
+    $mailer->send(
+        from: $env['SMTP_FROM'],
+        fromName: 'krankenzusatz-vergleich.de',
+        to: $to,
+        replyTo: $email,
+        subject: $subject,
+        body: $body
+    );
     echo json_encode(['success' => true]);
-} else {
+} catch (Throwable $e) {
+    error_log('lead.php SMTP-Fehler: ' . $e->getMessage());
     http_response_code(500);
     echo json_encode(['error' => 'Mail konnte nicht gesendet werden']);
 }
