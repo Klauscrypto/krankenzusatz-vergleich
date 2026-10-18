@@ -31,10 +31,10 @@ LOG_FILE   = Path('/var/log/krankenzusatz/generator.log')
 MODEL      = 'claude-sonnet-4-6'
 MAX_TOKENS = 6000  # erhöht für 1500-2500 Wörter
 
-AUTOR_NAME   = "Klaus Blömecke"
+AUTOR_NAME   = "Alexander Blömecke"
 AUTOR_TITLE  = "Versicherungsexperte, Inhaber Blömecke &amp; Partner"
 AUTOR_BIO    = (
-    "Klaus Blömecke ist zugelassener Versicherungsvermittler (IHK München, "
+    "Alexander Blömecke ist zugelassener Versicherungsvermittler (IHK München, "
     "Nr. D-6ULZ-YVLWB-50) und Inhaber von Blömecke &amp; Partner in Auerbach. "
     "Seit über 20 Jahren berät er GKV-Versicherte in Bayern und deutschlandweit "
     "zu Kranken-Zusatzversicherungen – persönlich, kostenlos und unverbindlich."
@@ -127,7 +127,7 @@ TOPICS = {
 }
 
 # ── SYSTEM-PROMPT ────────────────────────────────────────────────────────────
-SYSTEM_PROMPT_DE = f"""Du bist Klaus Blömecke, erfahrener Versicherungsexperte und Inhaber von Blömecke & Partner in Auerbach, Bayern. Du schreibst Ratgeber-Artikel für den Blog krankenzusatz-vergleich.de.
+SYSTEM_PROMPT_DE = f"""Du bist Alexander Blömecke, erfahrener Versicherungsexperte und Inhaber von Blömecke & Partner in Auerbach, Bayern. Du schreibst Ratgeber-Artikel für den Blog krankenzusatz-vergleich.de.
 
 WICHTIGE REGELN:
 
