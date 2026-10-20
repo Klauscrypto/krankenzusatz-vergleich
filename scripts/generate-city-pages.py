@@ -336,7 +336,8 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
     <a href="/krankenhaus/">Krankenhaus</a> &nbsp;·&nbsp;
     <a href="/erstinformation/">Erstinformation</a> &nbsp;·&nbsp;
     <a href="/impressum/">Impressum</a> &nbsp;·&nbsp;
-    <a href="/datenschutz/">Datenschutz</a>
+    <a href="/datenschutz/">Datenschutz</a> &nbsp;·&nbsp;
+    <a href="https://pilsner-digital.de/">Website: Pilsner Digital</a>
   </p>
 </footer>
 
