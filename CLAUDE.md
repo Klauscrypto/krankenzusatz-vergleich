@@ -57,8 +57,9 @@ Vollautomatische SEO-Website für Krankenzusatzversicherungen auf einem Hetzner 
 - `krankenzusatz-vergleich-en.html` → Englische Expat-Landingpage, direkt deploybar
 
 ## Automatischer Artikel-Generator
-- Läuft via Cronjob (Stand 26.10.2026): Mo–Fr 08:00 `--lang=de`, Mi 08:00 `--lang=en`.
-  Für EN gibt es **keinen Themen-Pool** – der EN-Lauf bricht jedes Mal ab, ohne etwas zu veröffentlichen.
+- Läuft via Cronjob (Stand 26.10.2026): Mo–Fr 08:00 `--lang=de`, nur Deutsch. Der frühere
+  EN-Lauf (Mi 08:00) ist gestrichen – es gab keinen EN-Themen-Pool, er brach jedes Mal ab.
+  Sicherung der alten Crontab: `/root/backup-crontab-2026-10-26-*.txt`.
 - **Keine Wiederholungen:** `pick_topic()` nimmt nur Titel, die weder in `topics.db` noch in
   WordPress stehen (`wp_published_titles()`). Ist der Pool leer, bricht der Lauf mit Fehler ab
   statt von vorn zu beginnen. Bis 26.10.2026 setzte er den Pool zurück: 48 von 90 Beiträgen
