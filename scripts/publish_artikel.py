@@ -26,6 +26,24 @@ def _wp_url(path: str) -> str:
     return f"{base}/blog/wp-json/wp/v2/{path}"
 
 
+def wp_published_titles() -> set[str]:
+    """Titel aller Beiträge im Blog (jeder Status außer Papierkorb), für den Duplikat-Check."""
+    import html
+    titles, page = set(), 1
+    while True:
+        r = requests.get(_wp_url('posts'), params={'per_page': 100, 'page': page, 'status': 'publish,future,draft,pending,private',
+                         '_fields': 'title', 'context': 'edit'}, auth=_wp_auth(), timeout=30)
+        if r.status_code == 400 and page > 1:
+            break
+        r.raise_for_status()
+        data = r.json()
+        titles |= {html.unescape(p['title']['raw']).strip() for p in data}
+        if page >= int(r.headers.get('X-WP-TotalPages', 1)):
+            break
+        page += 1
+    return titles
+
+
 def get_or_create_category(slug: str) -> int:
     """Gibt WP-Kategorie-ID zurück, erstellt Kategorie bei Bedarf."""
     if slug in _cat_id_cache:

@@ -21,7 +21,7 @@ from pathlib import Path
 
 import anthropic
 from dotenv import load_dotenv
-from publish_artikel import publish_to_wordpress
+from publish_artikel import publish_to_wordpress, wp_published_titles
 
 # ── KONFIGURATION ────────────────────────────────────────────────────────────
 BASE_DIR   = Path(__file__).parent
@@ -123,6 +123,69 @@ TOPICS = {
         ("gkv-ratgeber", "Versicherungsantrag ausfüllen: Gesundheitsfragen richtig beantworten"),
         ("gkv-ratgeber", "Kündigung und Wechsel: So wechseln Sie Ihre Zusatzversicherung ohne Lücken"),
         ("gkv-ratgeber", "Zusatzversicherung im Alter: Wann ist es noch sinnvoll abzuschließen?"),
+
+        # ── Erweiterung 26.10.2026 (der alte Pool war aufgebraucht und wurde wiederholt) ──
+        # Zahnzusatzversicherung
+        ("zahnzusatz", "Wurzelbehandlung: Wann die GKV zahlt und wann Sie privat zahlen müssen"),
+        ("zahnzusatz", "Parodontose-Behandlung: Kosten, GKV-Leistung und was eine Zusatzversicherung übernimmt"),
+        ("zahnzusatz", "Zahnstaffel erklärt: Warum die Erstattung in den ersten Jahren begrenzt ist"),
+        ("zahnzusatz", "Fehlende Zähne beim Abschluss: Was Sie vor dem Vertrag wissen müssen"),
+        ("zahnzusatz", "Heil- und Kostenplan verstehen: So lesen Sie den Plan Ihres Zahnarztes"),
+        ("zahnzusatz", "Kunststofffüllung oder Amalgam: Was die GKV zahlt und was der Zahnarzt berechnet"),
+        ("zahnzusatz", "Zahnersatz im Ausland: Lohnt sich der Weg – und was zahlt die Versicherung?"),
+        ("zahnzusatz", "Knirschschiene und Aufbissschiene: Wer übernimmt die Kosten?"),
+        ("zahnzusatz", "Zahnarztrechnung nach GOZ: Was der Steigerungssatz für Ihren Eigenanteil bedeutet"),
+        ("zahnzusatz", "Zahnzusatzversicherung für Rentner: Worauf es im Ruhestand ankommt"),
+        ("zahnzusatz", "Zahnzusatz für Paare und Familien: Einzelverträge oder gemeinsam absichern?"),
+        ("zahnzusatz", "Laufende Behandlung beim Abschluss: Warum der Zeitpunkt entscheidend ist"),
+        ("zahnzusatz", "Prothese, Teilprothese, Brücke: Kostenvergleich mit und ohne Zusatzversicherung"),
+        ("zahnzusatz", "Bleaching und ästhetische Zahnmedizin: Was eine Zahnzusatzversicherung leistet"),
+        ("zahnzusatz", "Zahnzusatzversicherung kündigen: Fristen, Folgen und der richtige Zeitpunkt"),
+        # Krankenhaus
+        ("krankenhaus", "Geplante Operation: Wie Sie vorher Ihre Krankenhausleistungen prüfen"),
+        ("krankenhaus", "Zweibettzimmer oder Einbettzimmer: Was der Unterschied im Tarif kostet"),
+        ("krankenhaus", "Krankenhauszusatz für Familien: Kinder richtig mitversichern"),
+        ("krankenhaus", "Ambulante Operation: Greift die Krankenhauszusatzversicherung?"),
+        ("krankenhaus", "Wahlärztliche Leistungen: Was auf der Wahlleistungsvereinbarung steht"),
+        ("krankenhaus", "Krankenhauszusatz ohne Gesundheitsfragen: Vor- und Nachteile"),
+        ("krankenhaus", "Reha nach dem Krankenhaus: Was die GKV zahlt und wo Lücken bleiben"),
+        ("krankenhaus", "Krankenhausaufenthalt im Ausland: Was GKV und Zusatzversicherung abdecken"),
+        ("krankenhaus", "Krankenhauszusatz für Berufseinsteiger: Warum sich ein früher Abschluss lohnen kann"),
+        ("krankenhaus", "Zuzahlung im Krankenhaus: 10 Euro pro Tag und wie Sie sie begrenzen"),
+        # Heilpraktiker / Naturheilkunde
+        ("heilpraktiker", "Homöopathie und Naturheilverfahren: Was die GKV übernimmt – und was nicht"),
+        ("heilpraktiker", "Gebührenverzeichnis für Heilpraktiker (GebüH): Was es für Ihre Erstattung bedeutet"),
+        ("heilpraktiker", "Chiropraktik und manuelle Therapie: Kosten und Erstattung im Überblick"),
+        ("heilpraktiker", "Traditionelle Chinesische Medizin: Wann eine Zusatzversicherung zahlt"),
+        ("heilpraktiker", "Heilpraktiker oder Arzt für Naturheilverfahren: Unterschied bei der Erstattung"),
+        # Vorsorge
+        ("vorsorge", "Krebsvorsorge: Welche Untersuchungen die GKV zahlt und welche IGeL-Leistungen sind"),
+        ("vorsorge", "IGeL-Leistungen beim Arzt: Wann sie sinnvoll sind und wer sie bezahlt"),
+        ("vorsorge", "Reiseimpfungen: Wer die Kosten übernimmt und wie Sie sparen"),
+        ("vorsorge", "Check-up ab 35: Was die Gesundheitsuntersuchung umfasst"),
+        ("vorsorge", "Hautkrebs-Screening: GKV-Leistung, Zusatzkosten und Erstattung"),
+        ("vorsorge", "Vorsorge für Kinder: U-Untersuchungen, Zahnprophylaxe und Zusatzleistungen"),
+        # Sehhilfen
+        ("sehhilfen", "Augenlasern: Kosten, Ablauf und ob eine Zusatzversicherung zahlt"),
+        ("sehhilfen", "Kontaktlinsen und Brille: Wann die GKV ausnahmsweise zuzahlt"),
+        ("sehhilfen", "Gleitsichtbrille: Was sie kostet und wie Sie sich gegen die Kosten absichern"),
+        ("sehhilfen", "Brille für Kinder: GKV-Zuschuss und sinnvolle Ergänzungen"),
+        # GKV-Ratgeber
+        ("gkv-ratgeber", "Beitragserhöhung bei der Zusatzversicherung: Warum sie kommt und was Sie tun können"),
+        ("gkv-ratgeber", "Wartezeiten in der Zusatzversicherung: Wann der Schutz wirklich beginnt"),
+        ("gkv-ratgeber", "Vorvertragliche Anzeigepflicht: Was passiert, wenn Sie etwas vergessen"),
+        ("gkv-ratgeber", "Zusatzversicherung und Steuer: Was Sie absetzen können"),
+        ("gkv-ratgeber", "Arbeitgeberfinanzierte Zusatzversicherung: So funktioniert die bKV"),
+        ("gkv-ratgeber", "Zusatzversicherung für Beamtenanwärter und Azubis: Was sinnvoll ist"),
+        ("gkv-ratgeber", "Familienversicherung in der GKV: Wer mitversichert ist und welche Lücken bleiben"),
+        ("gkv-ratgeber", "Erstattung einreichen: So bekommen Sie Ihr Geld schnell von der Zusatzversicherung"),
+        ("gkv-ratgeber", "Leistungsablehnung durch die Versicherung: Ihre Rechte und nächsten Schritte"),
+        ("gkv-ratgeber", "Zusatzbeitrag der Krankenkasse 2026: Was er bedeutet und wann ein Wechsel lohnt"),
+        ("gkv-ratgeber", "Pflegezusatzversicherung: Warum die gesetzliche Pflegeversicherung nur ein Teil ist"),
+        ("gkv-ratgeber", "Zusatzversicherung nach Umzug ins Ausland: Was mit Ihrem Vertrag passiert"),
+        ("gkv-ratgeber", "Tarifvergleich richtig lesen: Erstattungssätze, Höchstbeträge und Kleingedrucktes"),
+        ("gkv-ratgeber", "Beratung oder online abschließen: Was bei der Zusatzversicherung sicherer ist"),
+        ("gkv-ratgeber", "Krankentagegeld für Angestellte: Wann sich die Absicherung lohnt"),
     ],
 }
 
@@ -179,21 +242,20 @@ def init_db() -> sqlite3.Connection:
     return conn
 
 
-def pick_topic(conn: sqlite3.Connection, lang: str) -> tuple[str, str]:
+def pick_topic(conn: sqlite3.Connection, lang: str) -> tuple[str, str] | None:
+    """Wählt ein Thema, das es im Blog noch nicht gibt – oder None.
+
+    Früher wurde der Pool zurückgesetzt, sobald alle Themen durch waren. Ergebnis
+    bis Oktober 2026: 48 von 90 Beiträgen waren Wiederholungen mit Slug -2/-3.
+    Deshalb zählt jetzt zusätzlich, was in WordPress wirklich steht (auch von Hand
+    angelegte Beiträge), und ein leerer Pool bricht ab statt zu wiederholen."""
     published = {
         row[0]
         for row in conn.execute("SELECT topic FROM published WHERE lang = ?", (lang,))
     }
-    pool = TOPICS[lang]
-    available = [(cat, t) for cat, t in pool if t not in published]
-
-    if not available:
-        log.warning("Alle Themen für '%s' veröffentlicht – Pool zurücksetzen", lang)
-        conn.execute("DELETE FROM published WHERE lang = ?", (lang,))
-        conn.commit()
-        available = pool
-
-    return random.choice(available)
+    published |= wp_published_titles()
+    available = [(cat, t) for cat, t in TOPICS.get(lang, []) if t not in published]
+    return random.choice(available) if available else None
 
 
 def mark_published(conn: sqlite3.Connection, topic: str, lang: str, wp_post_id: int | None):
@@ -306,7 +368,11 @@ def main():
             sys.exit(1)
         category, title = match[0]
     else:
-        category, title = pick_topic(conn, args.lang)
+        picked = pick_topic(conn, args.lang)
+        if not picked:
+            log.error("Keine neuen Themen mehr für '%s' – TOPICS erweitern. Es wird nichts veröffentlicht.", args.lang)
+            sys.exit(1)
+        category, title = picked
 
     log.info("── Artikel-Generator gestartet ────────────────────")
     log.info("Sprache:   DE")

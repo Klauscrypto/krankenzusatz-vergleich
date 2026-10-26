@@ -57,8 +57,14 @@ Vollautomatische SEO-Website für Krankenzusatzversicherungen auf einem Hetzner 
 - `krankenzusatz-vergleich-en.html` → Englische Expat-Landingpage, direkt deploybar
 
 ## Automatischer Artikel-Generator
-- Läuft via Cronjob: 3x täglich (08:00, 13:00, 18:00 Uhr)
-- Sprachen: Deutsch + Englisch (je 1,5 Artikel pro Slot)
+- Läuft via Cronjob (Stand 26.10.2026): Mo–Fr 08:00 `--lang=de`, Mi 08:00 `--lang=en`.
+  Für EN gibt es **keinen Themen-Pool** – der EN-Lauf bricht jedes Mal ab, ohne etwas zu veröffentlichen.
+- **Keine Wiederholungen:** `pick_topic()` nimmt nur Titel, die weder in `topics.db` noch in
+  WordPress stehen (`wp_published_titles()`). Ist der Pool leer, bricht der Lauf mit Fehler ab
+  statt von vorn zu beginnen. Bis 26.10.2026 setzte er den Pool zurück: 48 von 90 Beiträgen
+  waren Duplikate (Slug -2/-3). Diese wurden gelöscht und per 301 auf den ältesten Beitrag
+  umgeleitet (mu-plugin `kz-duplikat-redirects.php` im Blog). **Neue Themen in `TOPICS`
+  ergänzen, bevor der Pool leer ist** – 55 frei am 26.10.2026, also etwa bis Mitte Januar 2027.
 - Tool: Python-Script → Claude API (claude-sonnet-4-6) → WordPress REST API
 - Themen-Pool: Krankenzusatzversicherung, Zahnzusatz, Krankenhaus, Heilpraktiker, GKV-Lücken, Expat-Guide
 - SEO: Jeder Artikel bekommt automatisch Title, Meta Description, Slug, Kategorie, Tags
