@@ -120,12 +120,15 @@ add_filter('the_content', function (string $content): string {
     $done = true;
 
     $link = '<a href="https://krankenzusatz-vergleich.de/">Krankenzusatzversicherung</a>';
-    // Nur erste Erwähnung verlinken (nicht in headings oder bereits verlinktem Text)
-    $content = preg_replace(
-        '/(?<!<a[^>]*>)(?<![">])Krankenzusatzversicherung(?![^<]*<\/a>)/',
+    // Nur erste Erwähnung verlinken, nicht in bereits verlinktem Text oder in Attributen.
+    // Kein Lookbehind variabler Länge wie früher (?<!<a[^>]*>): das kompiliert unter PCRE2
+    // nicht, preg_replace gab null zurück und jede Artikelseite brach mit HTTP 500 ab
+    // (TypeError wegen Rückgabetyp string) – von Juni bis 26.10.2026 unbemerkt.
+    $neu = preg_replace(
+        '/(?<![">\/])Krankenzusatzversicherung(?![^<]*<\/a>)/u',
         $link,
         $content,
         1
     );
-    return $content;
+    return $neu ?? $content;
 });
