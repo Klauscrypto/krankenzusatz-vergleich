@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
 """
 artikel-generator.py
-Generiert hochwertige Blogartikel (1500–2500 Wörter) via Claude API
-und veröffentlicht sie in WordPress. 1× täglich, nur DE.
+Generiert Ratgeber-Artikel via Claude API und veröffentlicht sie in WordPress. 1× täglich (auch am
+Wochenende), nur DE. Gleiches Verfahren wie die anderen Jarvis-Blogs („aus einer Feder“):
+
+  1. Artikel schreiben (Claude)
+  2. Unabhängiger Faktencheck durch einen zweiten Durchgang (Fachlektor, korrigiert wo möglich)
+  3. Qualitätsprüfung im Code: vollständig (nicht abgeschnitten), keine KI-Meta-Sätze
+     („Entschuldigung“, „ich meine natürlich“ …), Mindestlänge, Haftungshinweis, nur erlaubte Versicherer
+  4. Alles bestanden → live. Sonst → WordPress-Entwurf (nichts Fehlerhaftes geht online).
 
 Verwendung:
   python3 artikel-generator.py --lang=de
   python3 artikel-generator.py --dry-run
+  python3 artikel-generator.py --repair 144,145   # bestehende Beiträge neu schreiben (URL bleibt)
 """
 
 import argparse
+import re
 import sqlite3
 import os
 import sys
@@ -21,15 +29,25 @@ from pathlib import Path
 
 import anthropic
 from dotenv import load_dotenv
-from publish_artikel import publish_to_wordpress, wp_published_titles
+from publish_artikel import publish_to_wordpress, wp_published_titles, get_post, update_post_content
 
 # ── KONFIGURATION ────────────────────────────────────────────────────────────
 BASE_DIR   = Path(__file__).parent
 ENV_FILE   = BASE_DIR / '.env'
 DB_FILE    = BASE_DIR / 'topics.db'
 LOG_FILE   = Path('/var/log/krankenzusatz/generator.log')
-MODEL      = 'claude-sonnet-4-6'
-MAX_TOKENS = 6000  # erhöht für 1500-2500 Wörter
+MODEL      = os.environ.get('CLAUDE_MODEL', 'claude-opus-5-5')
+MAX_TOKENS = 16000  # genug Luft, damit nichts abgeschnitten wird (abgeschnitten = Entwurf)
+MIN_WOERTER = 900
+ERLAUBTE_VERSICHERER = {'DKV', 'Signal Iduna', 'Hanse Merkur', 'HanseMerkur'}
+ANDERE_VERSICHERER = ['Allianz', 'AXA', 'Barmenia', 'ARAG', 'ERGO', 'Gothaer', 'Debeka', 'Continentale',
+                      'Württembergische', 'SDK', 'Münchener Verein', 'Union Krankenversicherung', 'Huk', 'HUK',
+                      'Generali', 'Hallesche', 'Concordia',
+                      'Alte Oldenburger', 'Württembergische', 'Zurich', 'R+V', 'LVM', 'VGH', 'Provinzial']
+# Sätze, die nur ein Sprachmodell schreibt – dürfen nie online gehen
+META_MUSTER = re.compile(
+    r'Entschuldigung|ich meine natürlich|Korrektur:|Als (?:KI|Sprachmodell)|Hier ist (?:der|ein|Ihr) Artikel|'
+    r'Ich hoffe, dieser Artikel|```|\bLorem\b|\[(?:TODO|Platzhalter)[^\]]*\]', re.I)
 
 AUTOR_NAME   = "Alexander Blömecke"
 AUTOR_TITLE  = "Versicherungsexperte, Inhaber Blömecke &amp; Partner"
@@ -197,8 +215,13 @@ WICHTIGE REGELN:
 Länge & Qualität:
 - Mindestens 1.500 Wörter, idealerweise 1.800–2.200 Wörter
 - Kein generischer Fülltext – jeder Abschnitt muss echten Mehrwert bieten
-- Konkrete Zahlen, Beispiele und Vergleiche einbauen
+- Konkrete Beispiele und Vergleiche einbauen
 - Wo sinnvoll: eine Tabelle mit Vergleich (HTML <table>)
+
+Zahlen & Fakten (sehr wichtig – der Text wird anschließend von einem Fachlektor geprüft):
+- Nur gesicherte, allgemein gültige Zahlen (z. B. gesetzliche Regeln der GKV). Bei Unsicherheit weglassen.
+- Kosten nur als Spannen und erkennbar als Beispiel („beispielsweise“, „rund“, „je nach Praxis“).
+- Keine erfundenen Tarifnamen, Testergebnisse, Studien, Statistiken oder Beitragshöhen.
 
 Ton & Stil:
 - Sachlich, vertrauenswürdig, auf Augenhöhe mit dem Leser
@@ -210,7 +233,8 @@ Format (semantisches HTML, KEIN Markdown):
 - p, ul, ol, li, strong, em, table, thead, tbody, tr, th, td
 - Abschnittsstruktur: Einleitung → Hauptteil (3–5 Abschnitte) → Fazit
 
-Interne Verlinkung (PFLICHT – genau einmal pro Keyword):
+Interne Verlinkung (nur wenn der Begriff inhaltlich zum Thema passt – genau einmal pro Keyword;
+erwähne nie ein Produkt nur, um einen Link unterzubringen):
 - Erste Erwähnung "Zahnzusatzversicherung" → <a href="https://krankenzusatz-vergleich.de/zahnzusatz/">Zahnzusatzversicherung</a>
 - Erste Erwähnung "Krankenhauszusatz" → <a href="https://krankenzusatz-vergleich.de/krankenhaus/">Krankenhauszusatz</a>
 - Erste Erwähnung "DKV" → <a href="https://krankenzusatz-vergleich.de/dkv/">DKV</a>
@@ -223,7 +247,29 @@ Versicherer: Nur DKV, Signal Iduna und Hanse Merkur nennen – keine anderen.
 Haftungshinweis: Am Ende jedes Artikels EINEN Satz einfügen:
 <p><em>Hinweis: Dieser Artikel dient der allgemeinen Information und ersetzt keine individuelle Versicherungsberatung.</em></p>
 
-Ausgabe: Nur HTML-Artikelinhalt ohne <html>, <head>, <body> Tags. Beginne direkt mit dem ersten <h2>."""
+Ausgabe: Nur HTML-Artikelinhalt ohne <html>, <head>, <body> Tags. Beginne direkt mit dem ersten <h2>.
+Schreibe den Text in einem Zug fertig – keine Selbstkorrekturen im Text, keine Anmerkungen an den Leser
+über das Schreiben, keine Entschuldigungen."""
+
+SYSTEM_PRUEFUNG = """Du bist strenger Fachlektor für Krankenversicherung (GKV, private Zusatzversicherungen) in
+Deutschland und prüfst einen Ratgeber-Artikel für krankenzusatz-vergleich.de vor der Veröffentlichung.
+
+Prüfe auf:
+1. Fachliche Fehler oder veraltete Aussagen (GKV-Leistungen, Festzuschüsse, Zuzahlungen, Wartezeiten, Recht).
+2. Erfundene Zahlen, Tarifnamen, Testergebnisse, Studien oder Statistiken.
+3. Übertreibungen, Heilsversprechen oder individuelle Beratung („Sie sollten Tarif X abschließen“).
+4. Inhaltliche Sprünge, Selbstkorrekturen, KI-Meta-Sätze, Wiederholungen, abgebrochene Sätze.
+5. Versicherer außer DKV, Signal Iduna und Hanse Merkur (entfernen).
+6. Interne Links, die nicht zum Thema passen (entfernen, Text glätten).
+
+Korrigiere den Artikel so, dass alle Probleme behoben sind (Zweifelhaftes streichen oder vorsichtig formulieren).
+Erhalte HTML-Struktur, Links und den Hinweis-Satz am Ende. Kürze nicht unnötig.
+
+Antworte GENAU in diesem Format:
+<pruefung>{"freigabe": true oder false, "probleme": ["…", "…"]}</pruefung>
+<artikel>…vollständiger korrigierter HTML-Artikel…</artikel>
+
+freigabe = true NUR, wenn der korrigierte Artikel ohne Bedenken veröffentlicht werden kann."""
 
 # ── DATENBANK ────────────────────────────────────────────────────────────────
 def init_db() -> sqlite3.Connection:
@@ -267,35 +313,93 @@ def mark_published(conn: sqlite3.Connection, topic: str, lang: str, wp_post_id: 
 
 
 # ── ARTIKEL GENERIEREN ───────────────────────────────────────────────────────
+def _ask(client, system: str, user: str) -> str:
+    message = client.messages.create(
+        model=MODEL,
+        max_tokens=MAX_TOKENS,
+        system=system,
+        messages=[{'role': 'user', 'content': user}],
+    )
+    if message.stop_reason == 'max_tokens':
+        raise RuntimeError('Antwort abgeschnitten (max_tokens)')
+    if message.stop_reason == 'refusal':
+        raise RuntimeError('Modell hat abgelehnt')
+    text = ''.join(b.text for b in message.content if getattr(b, 'type', '') == 'text').strip()
+    log.info("Antwort: %d Zeichen | %d Output-Tokens | %s", len(text), message.usage.output_tokens, message.stop_reason)
+    return text
+
+
 def generate_article(category: str, title: str, lang: str) -> str:
     client = anthropic.Anthropic(api_key=os.environ['ANTHROPIC_API_KEY'])
-
+    heute = datetime.now().strftime('%d.%m.%Y')
     user_prompt = (
+        f'Heute ist der {heute}.\n'
         f'Schreibe einen ausführlichen, hochwertigen Ratgeber-Artikel mit dem Titel:\n'
         f'"{title}"\n\n'
         f'Kategorie: {category}\n\n'
         f'Anforderungen:\n'
-        f'- Mindestens 1.500 Wörter echten Inhalt\n'
+        f'- 1.200 bis 1.800 Wörter echten Inhalt\n'
         f'- Mindestens 3 aussagekräftige H2-Abschnitte\n'
         f'- Eine Vergleichstabelle (wenn zum Thema passend)\n'
-        f'- Konkrete Zahlen und Beispiele (Preise, Prozentsätze, Szenarien)\n'
-        f'- Alle internen Links wie in den Regeln beschrieben einbauen\n\n'
+        f'- Praxisnahe Beispiele; Zahlen nur nach den Regeln oben\n'
+        f'- Interne Links nur, wo sie zum Thema passen\n\n'
         f'Liefere nur den HTML-Artikelinhalt (ab H2), ohne Einleitung oder Erklärungen.'
     )
+    log.info("Generiere Artikel: '%s' (Modell %s)", title, MODEL)
+    content = _ask(client, SYSTEM_PROMPT_DE, user_prompt)
+    return re.sub(r'^```(?:html)?\s*|\s*```$', '', content).strip()
 
-    log.info("Generiere Artikel: '%s'", title)
 
-    message = client.messages.create(
-        model=MODEL,
-        max_tokens=MAX_TOKENS,
-        system=SYSTEM_PROMPT_DE,
-        messages=[{'role': 'user', 'content': user_prompt}],
-    )
+def faktencheck(title: str, content: str) -> tuple[bool, list[str], str]:
+    """Zweiter, unabhängiger Durchgang. Gibt (freigabe, probleme, korrigierter_html) zurück."""
+    client = anthropic.Anthropic(api_key=os.environ['ANTHROPIC_API_KEY'])
+    antwort = _ask(client, SYSTEM_PRUEFUNG, f'Titel: {title}\n\n{content}')
+    m_p = re.search(r'<pruefung>\s*(\{.*?\})\s*</pruefung>', antwort, re.S)
+    m_a = re.search(r'<artikel>\s*(.*?)\s*</artikel>', antwort, re.S)
+    if not m_p or not m_a:
+        return False, ['Faktencheck-Antwort nicht lesbar'], content
+    try:
+        p = json.loads(m_p.group(1))
+    except json.JSONDecodeError:
+        return False, ['Faktencheck-JSON nicht lesbar'], content
+    return bool(p.get('freigabe')), [str(x) for x in p.get('probleme', [])], m_a.group(1).strip()
 
-    content = message.content[0].text.strip()
-    log.info("Generiert: %d Zeichen | %d Output-Tokens",
-             len(content), message.usage.output_tokens)
-    return content
+
+def qualitaet(content: str) -> list[str]:
+    """Prüfungen im Code – jede Beanstandung hält den Artikel als Entwurf zurück."""
+    gruende = []
+    text = re.sub(r'<[^>]+>', ' ', content)
+    woerter = len(text.split())
+    if woerter < MIN_WOERTER:
+        gruende.append(f'zu kurz ({woerter} Wörter)')
+    m = META_MUSTER.search(text)
+    if m:
+        gruende.append(f'KI-Meta-Satz: „{m.group(0)}“')
+    if 'ersetzt keine individuelle Versicherungsberatung' not in text:
+        gruende.append('Hinweis-Satz am Ende fehlt (vermutlich abgeschnitten)')
+    if not re.search(r'</(?:p|ul|ol|table)>\s*$', content.strip()):
+        gruende.append('endet nicht mit einem vollständigen Absatz (abgeschnitten?)')
+    if re.search(r'<h1\b|^#{1,3} ', content, re.M):
+        gruende.append('falsches Format (h1 oder Markdown)')
+    for v in ANDERE_VERSICHERER:
+        if re.search(r'\b' + re.escape(v.strip()) + r'\b', text):
+            gruende.append(f'nicht erlaubter Versicherer: {v.strip()}')
+    for tag in ('table', 'ul', 'ol'):
+        if content.count(f'<{tag}') != content.count(f'</{tag}>'):
+            gruende.append(f'unvollständiges HTML ({tag})')
+    return gruende
+
+
+def erzeugen(category: str, title: str, lang: str) -> tuple[str, list[str], list[str]]:
+    """Schreiben → Faktencheck → Qualitätsprüfung. Gibt (html, gruende, probleme) zurück."""
+    content = generate_article(category, title, lang)
+    freigabe, probleme, geprueft = faktencheck(title, content)
+    for p in probleme:
+        log.info("Faktencheck: %s", p)
+    gruende = qualitaet(geprueft)
+    if not freigabe:
+        gruende.append('Faktencheck nicht bestanden')
+    return geprueft, gruende, probleme
 
 
 def append_author_box(content: str) -> str:
@@ -350,6 +454,8 @@ def main():
                         help='Nur generieren, nicht veröffentlichen')
     parser.add_argument('--topic', type=str, default=None,
                         help='Bestimmtes Thema erzwingen (Titeltext)')
+    parser.add_argument('--repair', type=str, default=None,
+                        help='Kommagetrennte WordPress-Post-IDs neu schreiben (URL bleibt gleich)')
     args = parser.parse_args()
 
     required_vars = ['ANTHROPIC_API_KEY', 'WP_URL', 'WP_USER', 'WP_APP_PASSWORD']
@@ -359,6 +465,30 @@ def main():
         sys.exit(1)
 
     conn = init_db()
+
+    if args.repair:
+        fehler = 0
+        for pid in [int(x) for x in args.repair.split(',') if x.strip()]:
+            post = get_post(pid)
+            title = re.sub(r'<[^>]+>', '', post['title']['raw'] if 'raw' in post['title'] else post['title']['rendered'])
+            cat_slug = 'gkv-ratgeber'
+            for c, t in TOPICS['de']:
+                if t == title:
+                    cat_slug = c
+            log.info("── Reparatur Beitrag %d: %s", pid, title)
+            try:
+                content, gruende, _ = erzeugen(cat_slug, title, 'de')
+            except Exception as e:
+                log.error("Reparatur %d fehlgeschlagen: %s", pid, e); fehler += 1; continue
+            if gruende:
+                log.error("Reparatur %d nicht übernommen (alter Text bleibt): %s", pid, '; '.join(gruende)); fehler += 1; continue
+            content = append_author_box(content)
+            meta = build_meta(title, content, 'de')
+            if args.dry_run:
+                print(content[:800]); continue
+            update_post_content(pid, content, excerpt=meta['excerpt'])
+            log.info("✓ Beitrag %d repariert (~%d Wörter)", pid, meta['word_count'])
+        sys.exit(1 if fehler else 0)
 
     if args.topic:
         pool = TOPICS.get(args.lang, [])
@@ -380,10 +510,27 @@ def main():
     log.info("Titel:     %s", title)
 
     try:
-        content = generate_article(category, title, args.lang)
-    except anthropic.APIError as e:
+        content, gruende, probleme = erzeugen(category, title, args.lang)
+        if gruende and not args.topic:
+            # Ein zweiter Versuch mit neuem Thema, damit der Tag nicht leer bleibt; das erste wird Entwurf
+            log.warning("Versuch 1 nur Entwurf (%s) – speichere Entwurf, neuer Versuch", '; '.join(gruende))
+            if not args.dry_run:
+                c1 = append_author_box(content); m1 = build_meta(title, c1, args.lang)
+                pid1 = publish_to_wordpress(title=title, content=c1, category_slug=category, tags=m1['tags'],
+                                            excerpt=m1['excerpt'], slug=m1['slug'], lang=args.lang, status='draft')
+                mark_published(conn, title, args.lang, pid1)
+            nxt = pick_topic(conn, args.lang)
+            if nxt:
+                category, title = nxt
+                log.info("Neues Thema: %s", title)
+                content, gruende, probleme = erzeugen(category, title, args.lang)
+    except (anthropic.APIError, RuntimeError) as e:
         log.error("Claude API Fehler: %s", e)
         sys.exit(1)
+
+    status = 'draft' if gruende else 'publish'
+    if gruende:
+        log.warning("Nur als ENTWURF gespeichert – Gründe: %s", '; '.join(gruende))
 
     content = append_author_box(content)
     meta    = build_meta(title, content, args.lang)
@@ -397,6 +544,7 @@ def main():
         print(f"Slug:   {meta['slug']}")
         print(f"Wörter: {meta['word_count']}")
         print(f"Tags:   {', '.join(meta['tags'])}")
+        print(f"Status: {status} {'; '.join(gruende)}")
         print(f"{'='*60}\n")
         print(content[:800] + '\n...')
         return
@@ -410,9 +558,10 @@ def main():
             excerpt=meta['excerpt'],
             slug=meta['slug'],
             lang=args.lang,
+            status=status,
         )
         mark_published(conn, title, args.lang, wp_post_id)
-        log.info("✓ Veröffentlicht: WP Post ID %d", wp_post_id)
+        log.info("✓ %s: WP Post ID %d", 'Veröffentlicht' if status == 'publish' else 'Entwurf', wp_post_id)
     except Exception as e:
         log.error("WordPress-Fehler: %s", e)
         sys.exit(1)

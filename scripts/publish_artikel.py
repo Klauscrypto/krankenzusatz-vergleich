@@ -115,6 +115,7 @@ def publish_to_wordpress(
     excerpt:       str,
     slug:          str,
     lang:          str = 'de',
+    status:        str = 'publish',
 ) -> int:
     """
     Veröffentlicht einen Artikel in WordPress via REST API.
@@ -128,7 +129,7 @@ def publish_to_wordpress(
         'content':    content,
         'excerpt':    excerpt,
         'slug':       slug,
-        'status':     'publish',
+        'status':     status,
         'categories': [cat_id],
         'tags':       tag_ids,
         'meta': {
@@ -157,3 +158,24 @@ def publish_to_wordpress(
     post = r.json()
     log.info("Artikel veröffentlicht: ID %d → %s", post['id'], post.get('link', ''))
     return post['id']
+
+
+def get_post(post_id: int) -> dict:
+    """Holt einen Beitrag (für --repair): Titel, Slug, Kategorie, Status."""
+    r = requests.get(_wp_url(f'posts/{post_id}'), params={'context': 'edit'}, auth=_wp_auth(), timeout=30)
+    r.raise_for_status()
+    return r.json()
+
+
+def update_post_content(post_id: int, content: str, excerpt: str | None = None, status: str | None = None) -> None:
+    """Ersetzt den Inhalt eines bestehenden Beitrags (URL/Slug bleiben gleich)."""
+    payload = {'content': content}
+    if excerpt:
+        payload['excerpt'] = excerpt
+    if status:
+        payload['status'] = status
+    r = requests.post(_wp_url(f'posts/{post_id}'), json=payload, auth=_wp_auth(), timeout=30)
+    if r.status_code not in (200, 201):
+        log.error("WordPress API Fehler %d: %s", r.status_code, r.text[:300])
+        r.raise_for_status()
+    log.info("Beitrag %d aktualisiert", post_id)

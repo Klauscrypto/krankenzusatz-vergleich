@@ -57,7 +57,14 @@ Vollautomatische SEO-Website für Krankenzusatzversicherungen auf einem Hetzner 
 - `krankenzusatz-vergleich-en.html` → Englische Expat-Landingpage, direkt deploybar
 
 ## Automatischer Artikel-Generator
-- Läuft via Cronjob (Stand 26.10.2026): Mo–Fr 08:00 `--lang=de`, nur Deutsch. Der frühere
+- **Stand 03.11.2026:** täglich 08:00 (auch Sa/So), Modell `claude-opus-5-5` (env `CLAUDE_MODEL`).
+  Verfahren wie alle Jarvis-Blogs („aus einer Feder“): schreiben → unabhängiger Faktencheck (Fachlektor,
+  korrigiert) → Qualitätsprüfung im Code (`qualitaet()`: abgeschnitten, KI-Meta-Sätze, Mindestlänge,
+  Hinweis-Satz, nur DKV/Signal Iduna/Hanse Merkur). Fällt etwas durch → WordPress-**Entwurf**, ein zweiter
+  Versuch mit neuem Thema. Reparatur alter Beiträge: `--repair <IDs>` (URL bleibt).
+- Server-Wartung ohne SSH: `wartung/auftrag.env` ändern + pushen → `.github/workflows/wartung.yml`
+  läuft nach dem Deploy (Crontab täglich, Reparaturen).
+- Davor (26.10.2026): Mo–Fr 08:00 `--lang=de`, nur Deutsch. Der frühere
   EN-Lauf (Mi 08:00) ist gestrichen – es gab keinen EN-Themen-Pool, er brach jedes Mal ab.
   Sicherung der alten Crontab: `/root/backup-crontab-2026-10-26-*.txt`.
 - **Keine Wiederholungen:** `pick_topic()` nimmt nur Titel, die weder in `topics.db` noch in
@@ -66,7 +73,7 @@ Vollautomatische SEO-Website für Krankenzusatzversicherungen auf einem Hetzner 
   waren Duplikate (Slug -2/-3). Diese wurden gelöscht und per 301 auf den ältesten Beitrag
   umgeleitet (mu-plugin `kz-duplikat-redirects.php` im Blog). **Neue Themen in `TOPICS`
   ergänzen, bevor der Pool leer ist** – 55 frei am 26.10.2026, also etwa bis Mitte Januar 2027.
-- Tool: Python-Script → Claude API (claude-sonnet-4-6) → WordPress REST API
+- Tool: Python-Script → Claude API (claude-opus-5-5, Faktencheck) → WordPress REST API
 - Themen-Pool: Krankenzusatzversicherung, Zahnzusatz, Krankenhaus, Heilpraktiker, GKV-Lücken, Expat-Guide
 - SEO: Jeder Artikel bekommt automatisch Title, Meta Description, Slug, Kategorie, Tags
 

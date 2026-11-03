@@ -1,0 +1,53 @@
+name: Wartung
+
+# Läuft nach jedem erfolgreichen Deploy – tut aber nur etwas, wenn wartung/auftrag.env im Commit geändert wurde.
+on:
+  workflow_run:
+    workflows: [Deploy]
+    types: [completed]
+
+jobs:
+  wartung:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 2
+
+      - name: Auftrag lesen
+        id: auftrag
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -q '^wartung/auftrag.env$'; then
+            echo "aktiv=1" >> "$GITHUB_OUTPUT"
+            grep -E '^(CRON_TAEGLICH|REPAIR_IDS)=' wartung/auftrag.env >> "$GITHUB_OUTPUT"
+          else
+            echo "aktiv=0" >> "$GITHUB_OUTPUT"
+            echo "Kein neuer Wartungsauftrag." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Auf dem Server ausführen
+        if: steps.auftrag.outputs.aktiv == '1'
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          CRON_TAEGLICH: ${{ steps.auftrag.outputs.CRON_TAEGLICH }}
+          REPAIR_IDS: ${{ steps.auftrag.outputs.REPAIR_IDS }}
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: root
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          envs: CRON_TAEGLICH,REPAIR_IDS
+          command_timeout: 45m
+          script: |
+            set -e
+            if [ "$CRON_TAEGLICH" = "1" ]; then
+              crontab -l > /root/backup-crontab-$(date +%Y-%m-%d-%H%M%S).txt
+              # Nur die Zeile des deutschen Artikel-Generators: Wochentag-Feld (5.) auf * (= jeden Tag)
+              crontab -l | awk '{ if ($0 ~ /artikel-generator\.py --lang=de/ && $0 !~ /^[[:space:]]*#/) { $5 = "*" } print }' | crontab -
+              echo "Crontab Artikel-Generator jetzt:"; crontab -l | grep 'artikel-generator' || true
+            fi
+            if [ -n "$REPAIR_IDS" ]; then
+              cd /var/www/scripts
+              python3 artikel-generator.py --repair "$REPAIR_IDS"
+            fi
