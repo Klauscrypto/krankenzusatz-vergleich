@@ -362,7 +362,12 @@ def faktencheck(title: str, content: str) -> tuple[bool, list[str], str]:
         p = json.loads(m_p.group(1))
     except json.JSONDecodeError:
         return False, ['Faktencheck-JSON nicht lesbar'], content
-    return bool(p.get('freigabe')), [str(x) for x in p.get('probleme', [])], m_a.group(1).strip()
+    html = m_a.group(1).strip()
+    # Alles vor der ersten Überschrift weg (z. B. ein mitkopiertes „Titel: …“)
+    i = html.find('<h2')
+    if i > 0:
+        html = html[i:]
+    return bool(p.get('freigabe')), [str(x) for x in p.get('probleme', [])], html
 
 
 def qualitaet(content: str) -> list[str]:
@@ -379,6 +384,8 @@ def qualitaet(content: str) -> list[str]:
         gruende.append('Hinweis-Satz am Ende fehlt (vermutlich abgeschnitten)')
     if not re.search(r'</(?:p|ul|ol|table)>\s*$', content.strip()):
         gruende.append('endet nicht mit einem vollständigen Absatz (abgeschnitten?)')
+    if not content.lstrip().startswith('<h2'):
+        gruende.append('beginnt nicht mit einer Zwischenüberschrift (Vorspann/„Titel:“ im Text?)')
     if re.search(r'<h1\b|^#{1,3} ', content, re.M):
         gruende.append('falsches Format (h1 oder Markdown)')
     for v in ANDERE_VERSICHERER:
