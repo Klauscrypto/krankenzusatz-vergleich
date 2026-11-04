@@ -288,6 +288,17 @@ def init_db() -> sqlite3.Connection:
     return conn
 
 
+# ── SAISON-THEMEN (Vorrang bis zum Datum, danach normaler Zufallspool) ──────
+# Klaus' Wunsch 04.11.2026: Jahresend-Saison nutzen. Jedes Thema läuft genau einmal.
+PRIORITY = {
+    'de': [
+        ("zahnzusatz", "Bonusheft vor Silvester: Warum Ihr Zahnarzttermin noch in diesem Jahr zählt", "2026-12-20"),
+        ("gkv-ratgeber", "Zusatzbeitrag 2027: Krankenkasse wechseln per Sonderkündigungsrecht – Ihre Zusatzversicherung bleibt", "2027-01-31"),
+        ("zahnzusatz", "Zahnzusatzversicherung zum Jahreswechsel: Worauf Sie bei Wartezeit und Leistungsstaffel achten", "2026-12-31"),
+    ],
+}
+
+
 def pick_topic(conn: sqlite3.Connection, lang: str) -> tuple[str, str] | None:
     """Wählt ein Thema, das es im Blog noch nicht gibt – oder None.
 
@@ -300,6 +311,10 @@ def pick_topic(conn: sqlite3.Connection, lang: str) -> tuple[str, str] | None:
         for row in conn.execute("SELECT topic FROM published WHERE lang = ?", (lang,))
     }
     published |= wp_published_titles()
+    heute = datetime.now(timezone.utc).date().isoformat()
+    for cat, t, bis in PRIORITY.get(lang, []):
+        if t not in published and heute <= bis:
+            return (cat, t)
     available = [(cat, t) for cat, t in TOPICS.get(lang, []) if t not in published]
     return random.choice(available) if available else None
 
