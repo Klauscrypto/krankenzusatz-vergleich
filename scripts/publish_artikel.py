@@ -167,9 +167,12 @@ def get_post(post_id: int) -> dict:
     return r.json()
 
 
-def update_post_content(post_id: int, content: str, excerpt: str | None = None, status: str | None = None) -> None:
-    """Ersetzt den Inhalt eines bestehenden Beitrags (URL/Slug bleiben gleich)."""
+def update_post_content(post_id: int, content: str, excerpt: str | None = None, status: str | None = None,
+                        title: str | None = None) -> None:
+    """Ersetzt den Inhalt eines bestehenden Beitrags (URL/Slug bleiben gleich, auch bei neuem Titel)."""
     payload = {'content': content}
+    if title:
+        payload['title'] = title
     if excerpt:
         payload['excerpt'] = excerpt
     if status:

@@ -103,7 +103,7 @@ TOPICS = {
     'de': [
         # Zahnzusatzversicherung
         ("zahnzusatz", "Zahnersatz 2026: Was zahlt die GKV – und was bleibt an Ihnen hängen?"),
-        ("zahnzusatz", "Zahnzusatzversicherung ohne Wartezeit: Die besten Tarife 2026 im Vergleich"),
+        ("zahnzusatz", "Zahnzusatzversicherung ohne Wartezeit: Worauf es 2026 beim Vergleich ankommt"),
         ("zahnzusatz", "Implantat oder Brücke: Was leistet die Zahnzusatzversicherung wirklich?"),
         ("zahnzusatz", "Kieferorthopädie für Erwachsene: Welche Tarife übernehmen die Kosten?"),
         ("zahnzusatz", "Professionelle Zahnreinigung: Warum die GKV kaum zahlt und Zusatztarife helfen"),
@@ -133,7 +133,7 @@ TOPICS = {
         # Heilpraktiker
         ("heilpraktiker", "Heilpraktiker-Zusatzversicherung 2026: Akupunktur, Osteopathie und mehr"),
         ("heilpraktiker", "Osteopathie-Kosten: Was die GKV zahlt – und warum eine Zusatzversicherung sinnvoll ist"),
-        ("heilpraktiker", "Naturheilkunde richtig absichern: Die besten Heilpraktiker-Tarife im Überblick"),
+        ("heilpraktiker", "Naturheilkunde richtig absichern: Heilpraktiker-Tarife im Überblick – worauf es ankommt"),
         # Vorsorge & Sehhilfen
         ("vorsorge", "Vorsorgeuntersuchungen: Was die GKV zahlt und wo Zusatztarife sinnvoll sind"),
         ("sehhilfen", "Brillenversicherung 2026: Wann lohnt sie sich – und wann nicht?"),
@@ -412,6 +412,14 @@ def qualitaet(content: str) -> list[str]:
     return gruende
 
 
+# Neue Titel für Reparaturen: Der Faktencheck lehnt Titel ab, die eine Bestenliste versprechen,
+# die der Artikel (zu Recht ohne Tarifnamen) nicht liefert. Slug/URL bleiben gleich.
+NEUE_TITEL = {
+    35: "Zahnzusatzversicherung ohne Wartezeit: Worauf es 2026 beim Vergleich ankommt",
+    38: "Naturheilkunde richtig absichern: Heilpraktiker-Tarife im Überblick – worauf es ankommt",
+}
+
+
 def erzeugen(category: str, title: str, lang: str) -> tuple[str, list[str], list[str]]:
     """Schreiben → Faktencheck → Qualitätsprüfung. Gibt (html, gruende, probleme) zurück."""
     content = generate_article(category, title, lang)
@@ -493,9 +501,13 @@ def main():
         for pid in [int(x) for x in args.repair.split(',') if x.strip()]:
             post = get_post(pid)
             title = re.sub(r'<[^>]+>', '', post['title']['raw'] if 'raw' in post['title'] else post['title']['rendered'])
+            neuer_titel = NEUE_TITEL.get(pid)
+            alter_titel = title
+            if neuer_titel:
+                title = neuer_titel
             cat_slug = 'gkv-ratgeber'
             for c, t in TOPICS['de']:
-                if t == title:
+                if t in (title, alter_titel):
                     cat_slug = c
             log.info("── Reparatur Beitrag %d: %s", pid, title)
             try:
@@ -508,7 +520,7 @@ def main():
             meta = build_meta(title, content, 'de')
             if args.dry_run:
                 print(content[:800]); continue
-            update_post_content(pid, content, excerpt=meta['excerpt'])
+            update_post_content(pid, content, excerpt=meta['excerpt'], title=neuer_titel)
             log.info("✓ Beitrag %d repariert (~%d Wörter)", pid, meta['word_count'])
         sys.exit(1 if fehler else 0)
 
