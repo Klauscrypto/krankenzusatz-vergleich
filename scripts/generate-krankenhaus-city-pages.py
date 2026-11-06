@@ -3,6 +3,10 @@
 Generiert 30 Stadt-Landingpages für Krankenhauszusatzversicherung.
 Output: public/krankenhaus-[slug]/index.html
 """
+# ACHTUNG (06.11.2026): Die Tariftabellen in dieser Vorlage enthielten erfundene Tarifnamen, Preise,
+# Sterne und "Testsieger"-Siegel. Die Seiten in public/ wurden direkt korrigiert (echte DKV-Daten laut
+# DKV-Online-Rechner). NICHT neu erzeugen, bevor die Vorlage unten entsprechend angepasst ist –
+# sonst kommen die falschen Angaben und die entfernten Cookie-Links zurück.
 import os
 
 CITIES = [
