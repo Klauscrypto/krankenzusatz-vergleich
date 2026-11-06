@@ -119,7 +119,7 @@ TOPICS = {
         ("krankenhaus", "Einbettzimmer im Krankenhaus: Für wen lohnt sich die Zusatzversicherung?"),
         ("krankenhaus", "Krankenhauszusatz für Selbstständige: Warum schnelle Genesung entscheidend ist"),
         ("krankenhaus", "Privatpatient als GKV-Versicherter: So geht es mit der richtigen Zusatzpolice"),
-        ("krankenhaus", "Wahlleistungen im Krankenhaus: Kosten, Nutzen und die besten Tarife 2026"),
+        ("krankenhaus", "Wahlleistungen im Krankenhaus: Kosten, Nutzen und worauf es bei Tarifen ankommt"),
         ("krankenhaus", "Krankenhaus-Tagegeld: Wieviel brauche ich wirklich und wann zahlt es sich aus?"),
         ("krankenhaus", "Rooming-In: Warum Eltern eine Krankenhauszusatz für ihre Kinder brauchen"),
         ("krankenhaus", "Freie Krankenhauswahl: Warum Spezialisten oft nur über Privatpatienten erreichbar sind"),
@@ -416,6 +416,7 @@ def qualitaet(content: str) -> list[str]:
 # die der Artikel (zu Recht ohne Tarifnamen) nicht liefert. Slug/URL bleiben gleich.
 NEUE_TITEL = {
     35: "Zahnzusatzversicherung ohne Wartezeit: Worauf es 2026 beim Vergleich ankommt",
+    28: "Wahlleistungen im Krankenhaus: Kosten, Nutzen und worauf es bei Tarifen ankommt",
     38: "Naturheilkunde richtig absichern: Heilpraktiker-Tarife im Überblick – worauf es ankommt",
 }
 
