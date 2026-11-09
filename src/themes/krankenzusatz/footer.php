@@ -20,8 +20,9 @@
       <div>
         <h4>Rechtliches</h4>
         <ul>
-          <li><a href="<?php echo get_permalink(get_page_by_path('impressum')); ?>">Impressum</a></li>
-          <li><a href="<?php echo get_permalink(get_page_by_path('datenschutz')); ?>">Datenschutz</a></li>
+          <li><a href="https://krankenzusatz-vergleich.de/impressum/">Impressum</a></li>
+          <li><a href="https://krankenzusatz-vergleich.de/datenschutz/">Datenschutz</a></li>
+          <li><a href="https://krankenzusatz-vergleich.de/erstinformation/">Erstinformation</a></li>
           <li><a href="https://krankenzusatz-vergleich.de/">Zur Startseite</a></li>
         </ul>
       </div>
@@ -31,8 +32,9 @@
         &nbsp;·&nbsp; Alle Angaben ohne Gewähr &nbsp;·&nbsp; Kein Finanzberatungsersatz
       </span>
       <div class="footer-legal">
-        <a href="<?php echo get_permalink(get_page_by_path('impressum')); ?>">Impressum</a>
-        <a href="<?php echo get_permalink(get_page_by_path('datenschutz')); ?>">Datenschutz</a> <a href="#" data-consent-open>Cookie-Einstellungen</a>
+        <a href="https://krankenzusatz-vergleich.de/impressum/">Impressum</a>
+        <a href="https://krankenzusatz-vergleich.de/datenschutz/">Datenschutz</a>
+        <a href="https://krankenzusatz-vergleich.de/erstinformation/">Erstinformation</a> <a href="#" data-consent-open>Cookie-Einstellungen</a>
       </div>
     </div>
   </div>
