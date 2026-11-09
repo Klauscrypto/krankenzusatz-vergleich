@@ -25,9 +25,7 @@
   <meta name="twitter:title" content="Krankenzusatzversicherung Vergleich 2026" />
   <meta name="twitter:description" content="DKV, Signal Iduna & Hanse Merkur vergleichen. Kostenlose Beratung. Jetzt vergleichen." />
   <meta name="twitter:image" content="https://krankenzusatz-vergleich.de/og-image.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="/fonts/inter.css" rel="stylesheet" />
 
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","@id":"https://krankenzusatz-vergleich.de/#org","name":"Blömecke & Partner","description":"Persönliche Beratung mit Top-Partnern für Krankenzusatzversicherungen – DKV, Signal Iduna & Hanse Merkur","url":"https://krankenzusatz-vergleich.de","telephone":"+49-9931-9819500","email":"a.bloemecke@bloemecke-partner.de","address":{"@type":"PostalAddress","streetAddress":"Siedlungsweg 6","addressLocality":"Auerbach","postalCode":"94530","addressCountry":"DE"},"geo":{"@type":"GeoCoordinates","latitude":48.7850,"longitude":13.1111},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:00","closes":"18:00"}],"priceRange":"€","image":"https://krankenzusatz-vergleich.de/img/logo.png","sameAs":["https://www.linkedin.com/company/bloemecke-partner"]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"krankenzusatz-vergleich.de","url":"https://krankenzusatz-vergleich.de","description":"Vergleich mit ausgewählten Top-Partnern für Krankenzusatzversicherungen in Deutschland","inLanguage":"de-DE","publisher":{"@type":"Organization","name":"Blömecke & Partner","url":"https://krankenzusatz-vergleich.de","logo":{"@type":"ImageObject","url":"https://krankenzusatz-vergleich.de/img/logo.png"},"contactPoint":{"@type":"ContactPoint","telephone":"+49-9931-9819500","contactType":"customer service","areaServed":"DE","availableLanguage":"German"},"address":{"@type":"PostalAddress","streetAddress":"Siedlungsweg 6","addressLocality":"Auerbach","postalCode":"94530","addressCountry":"DE"}}}</script>
@@ -730,6 +728,7 @@
         <h3 class="lead-form-title">Jetzt Beratung anfragen</h3>
         <p class="lead-form-sub">100% kostenlos & unverbindlich · Antwort in &lt; 24h</p>
         <form id="contactForm" onsubmit="submitForm(event)">
+          <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden"><label>Bitte leer lassen<input type="text" name="website" tabindex="-1" autocomplete="off" value=""></label></div><input type="hidden" name="fs" value=""><input type="hidden" name="source" value="Startseite DE">
           <div class="form-row">
             <div class="form-field">
               <label>Vorname *</label>
@@ -765,9 +764,11 @@
               <option>Kombination / Alles vergleichen</option>
             </select>
           </div>
+          <label style="display:flex;gap:10px;align-items:flex-start;margin:16px 0 4px;font-size:.78rem;font-weight:400;line-height:1.45;color:#475569;text-align:left;cursor:pointer"><input type="checkbox" name="einwilligung" value="ja" required style="flex:0 0 auto;width:16px;height:16px;margin:2px 0 0;padding:0;accent-color:#0057ff"><span>Ich willige ausdrücklich ein, dass Blömecke &amp; Partner meine Angaben in diesem Formular – einschließlich etwaiger Gesundheitsangaben (z.&nbsp;B. Vorerkrankungen, geplante Behandlungen) – zur Bearbeitung meiner Anfrage und zur Vorbereitung eines Angebots verarbeitet (Art.&nbsp;9 Abs.&nbsp;2 lit.&nbsp;a DSGVO). Die Einwilligung kann ich jederzeit mit Wirkung für die Zukunft widerrufen, z.&nbsp;B. per E-Mail an a.bloemecke@bloemecke-partner.de. Mehr dazu in der <a href="/datenschutz/" style="color:inherit;text-decoration:underline">Datenschutzerklärung</a>. *</span></label>
           <button type="submit" class="form-submit" id="submitBtn">Kostenlose Beratung anfragen →</button>
           <p class="form-privacy">🔒 Ihre Daten sind sicher. Keine Weitergabe an Dritte. <a href="/datenschutz/" style="color:inherit;text-decoration:underline;">Datenschutz</a> <a href="#" style="color:inherit;text-decoration:underline;" data-consent-open>Cookie-Einstellungen</a></p>
         </form>
+<script>/* Ausfüllzeit fürs Spam-Filter in lead.php */document.addEventListener('submit',function(e){var f=e.target;if(f&&f.elements&&f.elements.fs)f.elements.fs.value=Math.round(performance.now()/1000)},true)</script>
       </div>
       <div class="form-success" id="formSuccess">
         <div class="check">✅</div>

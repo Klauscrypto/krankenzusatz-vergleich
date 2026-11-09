@@ -28,9 +28,7 @@
   <meta name="twitter:title" content="Supplemental Health Insurance Germany – Expat Guide 2026" />
   <meta name="twitter:description" content="Your GKV leaves gaps. Compare 340+ top-up plans for expats in Germany. Free, in English." />
   <meta name="twitter:image" content="https://krankenzusatz-vergleich.de/og-image.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="/fonts/inter.css" rel="stylesheet" />
 
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Supplemental Health Insurance Germany – Expat Guide 2026","url":"https://krankenzusatz-vergleich.de/en/","description":"Independent English-language guide to supplemental health insurance in Germany for expats","inLanguage":"en","isPartOf":{"@type":"WebSite","url":"https://krankenzusatz-vergleich.de"},"publisher":{"@type":"Organization","name":"Blömecke & Partner","url":"https://krankenzusatz-vergleich.de","logo":{"@type":"ImageObject","url":"https://krankenzusatz-vergleich.de/img/logo.png"},"contactPoint":{"@type":"ContactPoint","telephone":"+49-9931-9819500","contactType":"customer service","areaServed":"DE","availableLanguage":["English","German"]}}}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do expats in Germany need supplemental health insurance?","acceptedAnswer":{"@type":"Answer","text":"Yes. Germany's public health insurance (GKV) covers basic care but leaves significant gaps – especially for dental work, private hospital rooms, and specialist access. Supplemental insurance closes these gaps – simple DKV dental plans start at €5.70/month for a 30-year-old."}},{"@type":"Question","name":"Can foreigners get supplemental health insurance in Germany?","acceptedAnswer":{"@type":"Answer","text":"Yes. Any legal resident of Germany – regardless of nationality – can take out supplemental health insurance as long as they are enrolled in the public health system (GKV). Most insurers only require a German address and IBAN."}},{"@type":"Question","name":"What is the difference between GKV and PKV in Germany?","acceptedAnswer":{"@type":"Answer","text":"GKV is Germany's statutory public health insurance, mandatory for most employees. PKV is full private insurance, available to high earners and self-employed. Supplemental insurance sits in between: you keep your GKV but add targeted top-up coverage."}},{"@type":"Question","name":"Are there waiting periods for supplemental insurance in Germany?","acceptedAnswer":{"@type":"Answer","text":"It depends on the plan. Many providers offer plans with no waiting period. Some have 3–8 months for dental work. Apply as soon as you arrive in Germany before any treatment starts."}},{"@type":"Question","name":"Is the comparison service free for expats?","acceptedAnswer":{"@type":"Answer","text":"Yes, completely free. Our comparison and consultation service costs you nothing. We receive a commission from insurers when a policy is signed – you pay the same price as buying directly."}}]}</script>
@@ -1027,6 +1025,7 @@
         <h3 class="lead-form-title">Request free advice</h3>
         <p class="lead-form-sub">100% free & no obligation · Reply within 24h · English-speaking advisor</p>
         <form id="contactForm" onsubmit="submitForm(event)">
+          <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden"><label>Bitte leer lassen<input type="text" name="website" tabindex="-1" autocomplete="off" value=""></label></div><input type="hidden" name="fs" value="">
           <div class="form-row">
             <div class="form-field">
               <label>First name *</label>
@@ -1063,9 +1062,11 @@
               <option>Everything / Full comparison</option>
             </select>
           </div>
+          <label style="display:flex;gap:10px;align-items:flex-start;margin:16px 0 4px;font-size:.78rem;font-weight:400;line-height:1.45;color:#475569;text-align:left;cursor:pointer"><input type="checkbox" name="einwilligung" value="ja" required style="flex:0 0 auto;width:16px;height:16px;margin:2px 0 0;padding:0;accent-color:#0057ff"><span>I expressly consent to Blömecke &amp; Partner processing the information in this form – including any health information (e.g. pre-existing conditions, planned treatment) – to handle my enquiry and prepare a quote (Art.&nbsp;9(2)(a) GDPR). I can withdraw my consent at any time with effect for the future, e.g. by email to a.bloemecke@bloemecke-partner.de. See our <a href="/datenschutz/" style="color:inherit;text-decoration:underline">privacy policy</a> (in German). *</span></label>
           <button type="submit" class="form-submit" id="submitBtn">Request free English advice →</button>
           <p class="form-privacy">🔒 GDPR compliant. Your data is never sold. <a href="/datenschutz/" style="color:inherit;text-decoration:underline;">Privacy policy</a></p>
         </form>
+<script>/* Ausfüllzeit fürs Spam-Filter in lead.php */document.addEventListener('submit',function(e){var f=e.target;if(f&&f.elements&&f.elements.fs)f.elements.fs.value=Math.round(performance.now()/1000)},true)</script>
       </div>
       <div class="form-success" id="formSuccess">
         <div class="check-big">✅</div>
