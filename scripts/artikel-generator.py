@@ -36,7 +36,7 @@ BASE_DIR   = Path(__file__).parent
 ENV_FILE   = BASE_DIR / '.env'
 DB_FILE    = BASE_DIR / 'topics.db'
 LOG_FILE   = Path('/var/log/krankenzusatz/generator.log')
-MODEL      = os.environ.get('CLAUDE_MODEL', 'claude-opus-5-5')
+MODEL      = os.environ.get('CLAUDE_MODEL', 'claude-sonnet-5-5')  # 22.11.2026: Sonnet statt Opus (Kosten)
 MAX_TOKENS = 16000  # genug Luft, damit nichts abgeschnitten wird (abgeschnitten = Entwurf)
 MIN_WOERTER = 900
 ERLAUBTE_VERSICHERER = {'DKV', 'Signal Iduna', 'Hanse Merkur', 'HanseMerkur'}

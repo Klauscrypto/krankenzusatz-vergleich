@@ -21,7 +21,7 @@ jobs:
         run: |
           if git diff --name-only HEAD~1 HEAD | grep -q '^wartung/auftrag.env$'; then
             echo "aktiv=1" >> "$GITHUB_OUTPUT"
-            grep -E '^(CRON_TAEGLICH|REPAIR_IDS)=' wartung/auftrag.env >> "$GITHUB_OUTPUT"
+            grep -E '^(CRON_TAEGLICH|CRON_WOCHENTAGE|REPAIR_IDS)=' wartung/auftrag.env >> "$GITHUB_OUTPUT"
           else
             echo "aktiv=0" >> "$GITHUB_OUTPUT"
             echo "Kein neuer Wartungsauftrag." >> "$GITHUB_STEP_SUMMARY"
@@ -33,11 +33,12 @@ jobs:
         env:
           CRON_TAEGLICH: ${{ steps.auftrag.outputs.CRON_TAEGLICH }}
           REPAIR_IDS: ${{ steps.auftrag.outputs.REPAIR_IDS }}
+          CRON_WOCHENTAGE: ${{ steps.auftrag.outputs.CRON_WOCHENTAGE }}
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: root
           key: ${{ secrets.SERVER_SSH_KEY }}
-          envs: CRON_TAEGLICH,REPAIR_IDS
+          envs: CRON_TAEGLICH,CRON_WOCHENTAGE,REPAIR_IDS
           command_timeout: 45m
           script: |
             set -e
@@ -45,6 +46,11 @@ jobs:
               crontab -l > /root/backup-crontab-$(date +%Y-%m-%d-%H%M%S).txt
               # Nur die Zeile des deutschen Artikel-Generators: Wochentag-Feld (5.) auf * (= jeden Tag)
               crontab -l | awk '{ if ($0 ~ /artikel-generator\.py --lang=de/ && $0 !~ /^[[:space:]]*#/) { $5 = "*" } print }' | crontab -
+              echo "Crontab Artikel-Generator jetzt:"; crontab -l | grep 'artikel-generator' || true
+            fi
+            if [ -n "$CRON_WOCHENTAGE" ]; then
+              crontab -l > /root/backup-crontab-$(date +%Y-%m-%d-%H%M%S).txt
+              crontab -l | awk -v t="$CRON_WOCHENTAGE" '{ if ($0 ~ /artikel-generator\.py --lang=de/ && $0 !~ /^[[:space:]]*#/) { $5 = t } print }' | crontab -
               echo "Crontab Artikel-Generator jetzt:"; crontab -l | grep 'artikel-generator' || true
             fi
             if [ -n "$REPAIR_IDS" ]; then

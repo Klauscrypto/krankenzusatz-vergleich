@@ -57,7 +57,8 @@ Vollautomatische SEO-Website für Krankenzusatzversicherungen auf einem Hetzner 
 - `krankenzusatz-vergleich-en.html` → Englische Expat-Landingpage, direkt deploybar
 
 ## Automatischer Artikel-Generator
-- **Stand 03.11.2026:** täglich 08:00 (auch Sa/So), Modell `claude-opus-5-5` (env `CLAUDE_MODEL`).
+- **Stand 22.11.2026:** nur Mo + Do 08:00, Modell `claude-sonnet-5-5` (Kosten; Opus-Standard bis 21.11.). Wochentage über `CRON_WOCHENTAGE` in `wartung/auftrag.env`.
+- Stand 03.11.2026: täglich 08:00 (auch Sa/So), Modell `claude-opus-5-5` (env `CLAUDE_MODEL`).
   Verfahren wie alle Jarvis-Blogs („aus einer Feder“): schreiben → unabhängiger Faktencheck (Fachlektor,
   korrigiert) → Qualitätsprüfung im Code (`qualitaet()`: abgeschnitten, KI-Meta-Sätze, Mindestlänge,
   Hinweis-Satz, nur DKV/Signal Iduna/Hanse Merkur). Fällt etwas durch → WordPress-**Entwurf**, ein zweiter
