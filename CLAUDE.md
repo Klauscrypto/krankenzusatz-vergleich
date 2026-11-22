@@ -146,3 +146,10 @@ DB_PASSWORD=...
 - Backups: Hetzner Snapshot täglich aktivieren
 - Monitoring: einfaches Uptime-Check via Hetzner oder UptimeRobot
 - DNS: A-Records bei All-Inkl auf Hetzner-IP zeigen lassen
+
+## Server-Werkzeuge ohne SSH (seit 22.11.2026)
+- `.github/workflows/diagnose.yml` (von Hand starten, nur lesend): nginx, Ports, pm2, Docker, Logs, Zertifikat für eine Domain.
+- 22.11.2026 06:41 UTC: nginx startete nach einem Neustart nicht mehr (`bind() to [::]:443 failed`), weil Tailscale Serve
+  Port 443 auf der Tailnet-Adresse hielt → **alle Webseiten auf dem Server 4 Std. offline**. Behoben per `nginx-start.yml`;
+  dauerhaft verhindert durch `/etc/systemd/system/nginx.service.d/tailscale-443.conf` (`nginx-tailscale-regel.yml`):
+  vor jedem nginx-Start `tailscale serve --https=443 off`, danach wieder an (Jarvis-Chat → 127.0.0.1:3110).
