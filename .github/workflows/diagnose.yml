@@ -19,6 +19,13 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           envs: ZIEL
           script: |
+            echo "== Wer belegt 80/443"; ss -ltnp | grep -E ":(80|443) " || echo "niemand"
+            echo "== nginx-Prozesse"; ps -eo pid,lstart,cmd | grep -E "[n]ginx" | head
+            echo "== journal nginx"; journalctl -u nginx -n 25 --no-pager | tail -25
+            echo "== geänderte nginx-Dateien (2 Tage)"; find /etc/nginx -newermt "-2 days" -type f -printf "%TY-%Tm-%Td %TH:%TM %p\n" | sort
+            echo "== tailscale serve"; tailscale serve status 2>&1 | head -10
+            echo "== Wer war eingeloggt / Befehle um 06:41"; last -n 8 2>/dev/null | head -8; grep -h " 06:4[0-2]" /var/log/syslog 2>/dev/null | grep -viE "pass|secret|token" | head -20
+            echo "== crm vHost"; grep -rl "crm.pilsner" /etc/nginx/ 2>/dev/null
             echo "== Uptime/Speicher"; uptime; free -m; df -h / | tail -1
             echo "== nginx"; systemctl is-active nginx; nginx -t 2>&1 | tail -3
             echo "== vHost"; grep -rl "server_name.*$ZIEL" /etc/nginx/sites-enabled/ 2>/dev/null
