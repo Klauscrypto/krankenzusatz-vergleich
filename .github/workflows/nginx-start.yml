@@ -1,0 +1,27 @@
+name: nginx wieder starten
+# Einmalig 22.11.2026: nginx kam nach Neustart nicht hoch, weil Tailscale Serve Port 443 (Tailnet-Adresse) belegt hatte.
+# Ablauf: Tailscale-Serve-Konfiguration sichern → 443 kurz frei → nginx starten → Jarvis-Zugang wieder an.
+on: workflow_dispatch
+jobs:
+  start:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: root
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            STAMP=$(date +%Y%m%d-%H%M%S); mkdir -p /root/backups
+            tailscale serve status --json > /root/backups/tailscale-serve-$STAMP.json
+            echo "Sicherung: /root/backups/tailscale-serve-$STAMP.json"
+            nginx -t
+            tailscale serve --https=443 off
+            systemctl start nginx; sleep 2
+            echo "nginx: $(systemctl is-active nginx)"
+            tailscale serve --bg --https=443 http://127.0.0.1:3110 || echo "FEHLER beim Wiedereinschalten des Jarvis-Zugangs"
+            echo "== Tailscale Serve jetzt"; tailscale serve status
+            echo "== Ports"; ss -ltnp | grep -E ":(80|443) "
+            for d in crm.pilsner-vertrieb.de pilsner-vertrieb.de sanitaer-heizung-deggendorf.de krankenzusatz-vergleich.de waerme-kraft.com pv-beratung.pilsner-vertrieb.de gtaw.pilsner-vertrieb.de; do
+              printf "%-36s %s\n" $d $(curl -s -o /dev/null -w "%{http_code}" -m 10 https://$d/); done
+            printf "%-36s %s\n" jarvis $(curl -s -o /dev/null -w "%{http_code}" -m 10 https://klaus-server1.tail0a346b.ts.net/)
