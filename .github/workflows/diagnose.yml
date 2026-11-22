@@ -1,0 +1,37 @@
+name: Diagnose
+# Nur lesend: Zustand des Servers (Dienste, nginx, Zertifikate, Speicher) – von Hand starten.
+on:
+  workflow_dispatch:
+    inputs:
+      ziel:
+        description: 'Domain, die geprüft wird'
+        default: 'crm.pilsner-vertrieb.de'
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.3
+        env:
+          ZIEL: ${{ inputs.ziel }}
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: root
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          envs: ZIEL
+          script: |
+            echo "== Uptime/Speicher"; uptime; free -m; df -h / | tail -1
+            echo "== nginx"; systemctl is-active nginx; nginx -t 2>&1 | tail -3
+            echo "== vHost"; grep -rl "server_name.*$ZIEL" /etc/nginx/sites-enabled/ 2>/dev/null
+            F=$(grep -rl "server_name.*$ZIEL" /etc/nginx/sites-enabled/ 2>/dev/null | head -1)
+            [ -n "$F" ] && grep -nE "listen|proxy_pass|ssl_certificate |root " "$F"
+            echo "== Zertifikat"; echo | timeout 10 openssl s_client -connect 127.0.0.1:443 -servername "$ZIEL" 2>/dev/null | openssl x509 -noout -subject -enddate 2>&1
+            echo "== Lokal über nginx"; curl -sk -o /dev/null -w "%{http_code}\n" --resolve "$ZIEL:443:127.0.0.1" "https://$ZIEL/" -m 15 || true
+            P=$(grep -hoE "proxy_pass http://127.0.0.1:[0-9]+" "$F" 2>/dev/null | head -1 | grep -oE "[0-9]+$")
+            echo "== Backend-Port $P"; [ -n "$P" ] && { ss -ltnp | grep ":$P " || echo "NICHTS lauscht auf $P"; curl -s -o /dev/null -w "%{http_code}\n" "http://127.0.0.1:$P/" -m 10 || true; }
+            echo "== pm2"; command -v pm2 >/dev/null && pm2 jlist 2>/dev/null | python3 -c "import sys,json; [print(p['name'],p['pm2_env']['status'],'restarts',p['pm2_env'].get('restart_time')) for p in json.load(sys.stdin)]" || true
+            echo "== systemd (crm)"; systemctl list-units --all --no-pager | grep -iE "crm|pilsner" || true
+            echo "== Docker"; docker ps -a --format '{{.Names}}\t{{.Status}}' 2>/dev/null | head -30
+            echo "== Logs crm"; for n in $(pm2 jlist 2>/dev/null | python3 -c "import sys,json; [print(p['name']) for p in json.load(sys.stdin) if 'crm' in p['name'].lower()]"); do pm2 logs "$n" --lines 40 --nostream 2>&1 | grep -viE "pass|secret|token" | tail -40; done
+            journalctl -u '*crm*' -n 30 --no-pager 2>/dev/null | grep -viE "pass|secret|token" | tail -30
+            echo "== nginx error.log"; tail -15 /var/log/nginx/error.log
+            echo "== DNS"; getent hosts "$ZIEL"; curl -s -m 5 https://ifconfig.me; echo
